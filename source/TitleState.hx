@@ -243,16 +243,16 @@ class TitleState extends MusicBeatState
 					switch (i + 1)
 					{
 						case 1:
-							createCoolText(['ninjamuffin99', 'phantomarcade', 'kawaisprite', 'evilsk8r']);
+							createCoolText(['phantomarcade', 'kawaisprite', 'evilsk8r']);
 						case 3:
 							addMoreText('present');
 						case 4:
 							deleteCoolText();
 						case 5:
 							engineLogo.visible = true;
-							createCoolText(['by stilic'], 180);
+							createCoolText(['yarn engine by'], 180);
 						case 7:
-							addMoreText('and other people', 180);
+							addMoreText('charlescatyt', 180);
 						case 8:
 							deleteCoolText();
 							engineLogo.visible = false;

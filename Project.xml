@@ -77,7 +77,7 @@
 	<assets path="assets/week7" library="week7" exclude="*.mp3|*.mp4" unless="web" />
 
 	<assets path="example_mods" rename="mods" embed="false" />
-	<assets path="art/readme.txt" rename="baseReadme.txt" />
+	<assets path="art/readme.txt" rename="do NOT readme.txt" />
 
 	<assets path="assets/fonts" embed="false" />
 
