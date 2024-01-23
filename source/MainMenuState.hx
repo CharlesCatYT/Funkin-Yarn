@@ -89,10 +89,10 @@ class MainMenuState extends MusicBeatState
 			startExitState(new ModsMenuState());
 		});
 		#end
-		/*menuItems.createItem(null, null, "donate", function()
+		menuItems.createItem(null, null, "credits", function()
 		{
-			CoolUtil.openURL('https://www.kickstarter.com/projects/funkin/friday-night-funkin-the-full-ass-game');
-		}, true);*/
+			startExitState(new CreditsMenuState());
+		});
 		menuItems.createItem(0, 0, "options", function()
 		{
 			startExitState(new OptionsState());
