@@ -23,7 +23,7 @@ class PreferencesMenu extends Page
 		['antialiasing', 'antialiasing', true],
 		#if !mobile
 		['fps counter', 'fps-counter', true], ['memory counter', 'mem-counter', true], ['memory peak counter', 'mem-peak-counter', true],
-		['objects counter', 'obj-counter', false]
+		['objects counter', 'obj-counter', false], ['fps watermark', 'watermark-counter', false]
 		#end
 	];
 
@@ -49,7 +49,7 @@ class PreferencesMenu extends Page
 			#end
 			'gpu-rendering',
 			'antialiasing',
-			#if !mobile 'fps-counter', 'mem-counter', 'mem-peak-counter', 'obj-counter' #end
+			#if !mobile 'fps-counter', 'mem-counter', 'mem-peak-counter', 'obj-counter', 'watermark-counter' #end
 		]
 	];
 
@@ -200,6 +200,9 @@ class PreferencesMenu extends Page
 			case 'obj-counter':
 				if (Main.fpsCounter != null)
 					Main.fpsCounter.showObjectCount = value;
+			case 'watermark-counter':
+				if (Main.fpsCounter != null)
+					Main.fpsCounter.showFPSWatermark = value;
 			#end
 		}
 	}

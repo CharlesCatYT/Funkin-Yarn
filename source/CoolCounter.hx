@@ -28,6 +28,7 @@ class CoolCounter extends TextField
 	public var showMemory:Bool = true;
 	public var showMemoryPeak:Bool = true;
 	public var showObjectCount:Bool = false;
+	public var showFPSWatermark:Bool = true;
 
 	public var memoryPeak(default, null):Float = 0;
 
@@ -97,6 +98,9 @@ class CoolCounter extends TextField
 
 			if (showObjectCount)
 				leText += 'Objects: ${FlxG.state != null ? FlxG.state.members.length : 0}';
+
+			if (showFPSWatermark)
+				leText += 'Yarn v0.1.0 ALPHA';
 
 			text = leText;
 

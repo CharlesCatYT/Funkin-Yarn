@@ -32,7 +32,7 @@ class Main extends Sprite
 	static final gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	static final initialState:Class<FlxState> = StartState; // The FlxState the game starts with.
 	static final framerate:Int = 120; // How many frames per second the game should run at.
-	static final skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
+	static final skipSplash:Bool = false; // Whether to skip the flixel splash screen that appears in release mode.
 	static final startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
 
 	#if !mobile
@@ -148,12 +148,16 @@ class Main extends Sprite
 			}
 		}
 
-		errMsg += '\nUncaught Error: ' + e.error + '\nPlease report this error to the GitHub issues page: https://github.com/Stilic/FNF-FlatyEngine/issues';
+		errMsg += '\nUncaught Error: ' + e.error + '\nPlease report this error to the GitHub issues page: https://github.com/CharlesCatYT/Funkin-Yarn/issues';
 
 		#if sys
 		if (!FileSystem.exists(crashHandlerDirectory))
 			FileSystem.createDirectory(crashHandlerDirectory);
-		File.saveContent(crashHandlerDirectory + '/' + Date.now().toString().replace(' ', '_').replace(':', "'") + '.txt', errMsg + '\n');
+		File.saveContent(crashHandlerDirectory
+			+ '/YarnEngine-'
+			+ Date.now().toString().replace(' ', '_').replace(':', "'")
+			+ '.txt', errMsg
+			+ '\n');
 		#end
 
 		CoolUtil.nativeTrace(errMsg);
