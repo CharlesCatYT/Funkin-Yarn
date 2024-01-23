@@ -26,8 +26,7 @@ using StringTools;
 
 class MainMenuState extends MusicBeatState
 {
-	public static final version:String = '0.0.1';
-
+	public static final version:String = '0.1.0-alpha';
 	var menuItems:MainMenuList;
 
 	var magenta:FlxSprite;
@@ -36,7 +35,6 @@ class MainMenuState extends MusicBeatState
 	override function create()
 	{
 		#if discord_rpc
-		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
@@ -68,10 +66,7 @@ class MainMenuState extends MusicBeatState
 		magenta.antialiasing = PreferencesMenu.getPref('antialiasing');
 		magenta.color = 0xFFFD719B;
 		if (PreferencesMenu.getPref('flashing-menu'))
-		{
 			add(magenta);
-		}
-		// magenta.scrollFactor.set();
 
 		menuItems = new MainMenuList();
 		add(menuItems);
@@ -94,12 +89,10 @@ class MainMenuState extends MusicBeatState
 			startExitState(new ModsMenuState());
 		});
 		#end
-		#if !switch
-		menuItems.createItem(null, null, "donate", function()
+		/*menuItems.createItem(null, null, "donate", function()
 		{
 			CoolUtil.openURL('https://www.kickstarter.com/projects/funkin/friday-night-funkin-the-full-ass-game');
-		}, true);
-		#end
+		}, true);*/
 		menuItems.createItem(0, 0, "options", function()
 		{
 			startExitState(new OptionsState());
@@ -113,8 +106,7 @@ class MainMenuState extends MusicBeatState
 			item.y = pos + (160 * i);
 		}
 
-		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "FNF v" + FlxG.stage.application.meta.get('version') + " - Flaty Engine v" + version,
-			12);
+		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "FNF v" + FlxG.stage.application.meta.get('version') + " - Funkin' Yarn v" + version, 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat(Paths.font('vcr.ttf'), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
@@ -123,9 +115,7 @@ class MainMenuState extends MusicBeatState
 	}
 
 	function onMenuItemChange(item:MenuItem)
-	{
 		menuCamera.camFollow.copyFrom(item.getGraphicMidpoint());
-	}
 
 	function startExitState(nextState:FlxState)
 	{
