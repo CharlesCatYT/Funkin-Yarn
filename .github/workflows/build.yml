@@ -21,17 +21,17 @@ jobs:
         run: |
           sudo apt-get install libvlc-dev libvlccore-dev vlc glibc-source libidn-dev libidn12
           haxelib setup ~/haxelib
-          haxelib install lime
-          haxelib install openfl
-          haxelib install flixel
-          haxelib run lime setup
-          haxelib run lime setup flixel
-          haxelib install flixel-tools
-          haxelib install flixel-ui
-          haxelib install flixel-addons
-          haxelib install flxanimate
-          haxelib install hscript
-          haxelib install polymod
+          haxelib install lime --quiet
+          haxelib install openfl --quiet
+          haxelib install flixel --quiet
+          haxelib run lime setup --quiet
+          haxelib run lime setup flixel --quiet
+          haxelib install flixel-tools --quiet
+          haxelib install flixel-ui --quiet
+          haxelib install flixel-addons --quiet
+          haxelib install flxanimate --quiet
+          haxelib install hscript --quiet
+          haxelib install polymod --quiet
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
       - name: Compile
         run: haxelib run lime build linux
@@ -52,18 +52,18 @@ jobs:
       - name: Install Haxelib
         run: |
           haxelib setup C:/haxelib
-          haxelib install lime
-          haxelib install openfl
-          haxelib install flixel
-          haxelib run lime setup
-          haxelib run lime setup flixel
-          haxelib install flixel-tools
-          haxelib install flixel-ui
-          haxelib install flixel-addons
-          haxelib install flxanimate
-          haxelib install hxCodec
-          haxelib install hscript
-          haxelib install polymod
+          haxelib install lime --quiet
+          haxelib install openfl --quiet
+          haxelib install flixel --quiet
+          haxelib run lime setup --quiet
+          haxelib run lime setup flixel --quiet
+          haxelib install flixel-tools --quiet
+          haxelib install flixel-ui --quiet
+          haxelib install flixel-addons --quiet
+          haxelib install flxanimate --quiet
+          haxelib install hxCodec --quiet
+          haxelib install hscript --quiet
+          haxelib install polymod --quiet
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
         shell: cmd
       - name: Compile
@@ -85,17 +85,17 @@ jobs:
       - name: Install Haxelib
         run: |
           haxelib setup ~/haxelib
-          haxelib install lime
-          haxelib install openfl
-          haxelib install flixel
-          haxelib run lime setup
-          haxelib run lime setup flixel
-          haxelib install flixel-tools
-          haxelib install flixel-ui
-          haxelib install flixel-addons
-          haxelib install flxanimate
-          haxelib install hscript
-          haxelib install polymod
+          haxelib install lime --quiet
+          haxelib install openfl --quiet
+          haxelib install flixel --quiet
+          haxelib run lime setup --quiet
+          haxelib run lime setup flixel --quiet
+          haxelib install flixel-tools --quiet
+          haxelib install flixel-ui --quiet
+          haxelib install flixel-addons --quiet
+          haxelib install flxanimate --quiet
+          haxelib install hscript --quiet
+          haxelib install polymod --quiet
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
       - name: Compile
         run: haxelib run lime build mac
@@ -116,16 +116,16 @@ jobs:
       - name: Install Haxelib
         run: |
           haxelib setup ~/haxelib
-          haxelib install lime
-          haxelib install openfl
-          haxelib install flixel
-          haxelib run lime setup
-          haxelib run lime setup flixel
-          haxelib install flixel-tools
-          haxelib install flixel-ui
-          haxelib install flixel-addons
-          haxelib install flxanimate
-          haxelib install hxCodec
+          haxelib install lime --quiet
+          haxelib install openfl --quiet
+          haxelib install flixel --quiet
+          haxelib run lime setup --quiet
+          haxelib run lime setup flixel --quiet
+          haxelib install flixel-tools --quiet
+          haxelib install flixel-ui --quiet
+          haxelib install flixel-addons --quiet
+          haxelib install flxanimate --quiet
+          haxelib install hxCodec --quiet
       - name: Compile
         run: haxelib run lime build html5
       - name: Deploy
