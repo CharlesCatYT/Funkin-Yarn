@@ -2,7 +2,7 @@ package;
 
 import ui.PreferencesMenu;
 import flixel.FlxG;
-import flixel.system.FlxSound;
+import flixel.sound.FlxSound;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 

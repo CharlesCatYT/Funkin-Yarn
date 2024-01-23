@@ -23,7 +23,7 @@ import sys.FileSystem;
 import sys.io.File;
 #end
 
-class CreditsMenu extends MusicBeatState
+class CreditsMenuState extends MusicBeatState
 {
 	var credits:Array<CreditsMetadata> = [];
 
@@ -100,8 +100,8 @@ class CreditsMenu extends MusicBeatState
 	{
 		super.update(elapsed);
 
-		var upP = controls.UP_P;
-		var downP = controls.DOWN_P;
+		var upP = controls.UI_UP_P;
+		var downP = controls.UI_DOWN_P;
 		var accepted = controls.ACCEPT;
 		var space = FlxG.keys.justPressed.SPACE;
 
@@ -121,7 +121,7 @@ class CreditsMenu extends MusicBeatState
 		}
 
 		if (controls.BACK)
-			MusicBeatState.switchState(new MainMenuState());
+			Main.switchState(new MainMenuState());
 	}
 
 	function changeSelection(change:Int = 0)

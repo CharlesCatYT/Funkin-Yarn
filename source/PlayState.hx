@@ -1,7 +1,7 @@
 package;
 
 #if hxCodec
-import vlc.MP4Handler;
+import hxcodec.flixel.FlxVideo;
 #end
 #if discord_rpc
 import Discord.DiscordClient;
@@ -19,7 +19,7 @@ import flixel.addons.transition.FlxTransitionableState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
-import flixel.system.FlxSound;
+import flixel.sound.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -961,7 +961,7 @@ class PlayState extends MusicBeatState
 		#if hxCodec
 		inCutscene = true;
 
-		var video = new MP4Handler();
+		var video:FlxVideo = new FlxVideo();
 		video.finishCallback = endShit;
 		video.playVideo(Paths.video(name));
 		#else

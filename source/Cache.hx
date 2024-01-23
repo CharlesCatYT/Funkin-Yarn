@@ -6,7 +6,7 @@ import openfl.media.Sound;
 import flixel.FlxG;
 import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.system.FlxSound;
+import flixel.sound.FlxSound;
 import flixel.util.FlxDestroyUtil;
 import ui.AtlasText;
 import ui.PreferencesMenu;
