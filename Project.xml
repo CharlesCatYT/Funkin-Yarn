@@ -78,6 +78,8 @@
 
 	<assets path="example_mods" rename="mods" embed="false" />
 	<assets path="art/readme.txt" rename="do NOT readme.txt" />
+	<assets path="LICENSE" rename="license.txt" />
+
 
 	<assets path="assets/fonts" embed="false" />
 
