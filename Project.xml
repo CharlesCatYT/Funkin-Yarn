@@ -2,14 +2,8 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin': Flaty Engine" file="FlatyEngine" packageName="com.stilic.flatyengine" package="com.stilic.flatyengine" main="Main" version="0.2.8" company="stilic" />
+	<app title="Funkin' Yarn" file="FunkinYarn" packageName="com.charlescatyt.funkinyarn" package="com.charlescatyt.funkinyarn" main="Main" version="0.2.8" company="CharlesCatYT" />
 
-	<!--Switch Export with Unique ApplicationID and Icon-->
-	<set name="APP_ID" value="0x0100f6c013bbc000" />
-
-	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
-		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
-	<!-- <app preloader="Preloader" resizable="true" /> -->
 	<app preloader="flixel.system.FlxPreloader" />
 
 	<!--Minimum without FLX_NO_GAMEPAD: 11.8, without FLX_NO_NATIVE_CURSOR: 11.2-->
@@ -28,9 +22,6 @@
 
 	<!--Mobile-specific-->
 	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" resizable="false" />
-
-	<!--Switch-specific-->
-	<window if="switch" orientation="landscape" fullscreen="true" width="0" height="0" resizable="true" />
 
 	<!-- _____________________________ Path Settings ____________________________ -->
 
@@ -86,14 +77,9 @@
 	<assets path="assets/week7" library="week7" exclude="*.mp3|*.mp4" unless="web" />
 
 	<assets path="example_mods" rename="mods" embed="false" />
-	<assets path="art/readme.txt" rename="do NOT readme.txt" />
+	<assets path="art/readme.txt" rename="baseReadme.txt" />
 
-	<!-- NOTE FOR FUTURE SELF SINCE FONTS ARE ALWAYS FUCKY 
-		TO FIX ONE OF THEM, I CONVERTED IT TO OTF. DUNNO IF YOU NEED TO
-		THEN UHHH I USED THE NAME OF THE FONT WITH SETFORMAT() ON THE TEXT!!!
-		NOT USING A DIRECT THING TO THE ASSET!!!
-	-->
-	<assets path="assets/fonts" embed="true" />
+	<assets path="assets/fonts" embed="false" />
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
