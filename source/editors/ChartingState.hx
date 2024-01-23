@@ -192,7 +192,7 @@ class ChartingState extends MusicBeatState
 
 		var loadAutosaveBtn:FlxButton = new FlxButton(reloadSongJson.x, reloadSongJson.y + 30, "Load Autosave", loadAutosave);
 
-		var stepperSpeed:FlxUINumericStepper = new FlxUINumericStepper(10, 80, 0.1, 1, 0.1, 10, 2);
+		var stepperSpeed:FlxUINumericStepper = new FlxUINumericStepper(10, 80, 0.1, 1, 0.1, 25, 2);
 		stepperSpeed.value = _song.speed;
 		stepperSpeed.name = 'song_speed';
 
