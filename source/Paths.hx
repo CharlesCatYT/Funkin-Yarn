@@ -65,6 +65,11 @@ class Paths
 		return getPath('data/$key.xml', TEXT, library);
 	}
 
+	inline static public function json2(key:String, ?library:String)
+	{
+		return getPath('$key.json', TEXT, library);
+	}
+
 	inline static public function json(key:String, ?library:String)
 	{
 		return getPath('data/$key.json', TEXT, library);
