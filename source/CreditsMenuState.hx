@@ -37,17 +37,21 @@ class CreditsMenu extends MusicBeatState
 
 	override function create()
 	{
-		var initCreditlist = CoolUtil.coolTextFile(Paths.txt('data/creditsList'));
+		var initCreditlist = CoolUtil.coolTextFile(Paths.txt('creditsList'));
 
-		if (FileSystem.exists(Paths.modTxt('data/creditsList')) && FileSystem.exists(Paths.txt('data/creditsList')))
+		#if !html5
+		if (FileSystem.exists(Paths.txt('creditsList')) && FileSystem.exists(Paths.txt('creditsList')))
 		{
-			initCreditlist = File.getContent(Paths.modTxt('data/creditsList')).trim().split('\n');
+			initCreditlist = File.getContent(Paths.txt('creditsList')).trim().split('\n');
 
 			for (i in 0...initCreditlist.length)
 				initCreditlist[i] = initCreditlist[i].trim();
 		}
 		else
-			initCreditlist = CoolUtil.coolTextFile(Paths.txt('data/creditsList'));
+			initCreditlist = CoolUtil.coolTextFile(Paths.txt('creditsList'));
+		#else
+		initCreditlist = CoolUtil.coolTextFile(Paths.txt('creditsList'));
+		#end
 
 		for (i in 0...initCreditlist.length)
 		{
