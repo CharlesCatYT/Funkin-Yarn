@@ -31,7 +31,6 @@ jobs:
           haxelib install flixel-addons --quiet
           haxelib install flxanimate --quiet
           haxelib install hscript --quiet
-          haxelib install polymod --quiet
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
       - name: Compile
         run: haxelib run lime build linux
@@ -63,7 +62,6 @@ jobs:
           haxelib install flxanimate --quiet
           haxelib install hxCodec --quiet
           haxelib install hscript --quiet
-          haxelib install polymod --quiet
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
         shell: cmd
       - name: Compile
@@ -95,7 +93,6 @@ jobs:
           haxelib install flixel-addons --quiet
           haxelib install flxanimate --quiet
           haxelib install hscript --quiet
-          haxelib install polymod --quiet
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
       - name: Compile
         run: haxelib run lime build mac
