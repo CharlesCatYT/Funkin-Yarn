@@ -92,15 +92,16 @@ class FreeplayState extends MusicBeatState
 		}
 		else
 			initSongList = CoolUtil.coolTextFile(Paths.txt('freeplayList'));
+		#else
+		// addSong('Test', 1, 'bf-pixel');
+		initSongList = CoolUtil.coolTextFile(Paths.txt('freeplayList'));
+		#end
 
 		for (i in 0...initSongList.length)
 		{
 			var data:Array<String> = initSongList[i].split('::');
 			songs.push(new SongMetadata(data[0], Std.parseInt(data[1]), data[2]));
 		}
-		#else
-		addSong('Test', 1, 'bf-pixel');
-		#end
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		add(bg);
