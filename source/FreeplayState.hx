@@ -16,6 +16,11 @@ import flixel.util.FlxColor;
 
 using StringTools;
 
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
+
 class FreeplayState extends MusicBeatState
 {
 	var songs:Array<SongMetadata> = [];
@@ -39,12 +44,12 @@ class FreeplayState extends MusicBeatState
 
 	private var grpText:FlxTypedGroup<Alphabet>;
 	private var coolColors = [
-		0xFF9271FD,
-		0xFF9271FD,
-		0xFF223344,
-		0xFF941653,
+		0xFF972F61,
+		0xFF9072F1,
+		0xFFA06917,
+		0xFF79B655,
 		0xFFFC96D7,
-		0xFFA0D1FF,
+		0xFF8EBCE7,
 		0xFFFF78BF,
 		0xFFF6B604
 	];
@@ -58,6 +63,8 @@ class FreeplayState extends MusicBeatState
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
+		var initSongList = CoolUtil.coolTextFile(Paths.txt('freeplayList'));
+
 		#if target.threaded
 		mutex = new Mutex();
 		if (FlxG.sound.music != null)
@@ -68,7 +75,6 @@ class FreeplayState extends MusicBeatState
 		#end
 
 		addWeek(['Tutorial'], 0, ['gf']);
-
 		addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], 1, ['dad']);
 		addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky', 'spooky', 'monster']);
 		addWeek(['Pico', 'Philly', 'Blammed'], 3, ['pico']);
@@ -76,11 +82,25 @@ class FreeplayState extends MusicBeatState
 		addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], 5, ['parents-christmas', 'parents-christmas', 'monster-christmas']);
 		addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
 		addWeek(['Ugh', 'Guns', 'Stress'], 7, ['tankman']);
+		#if !html5
+		if (FileSystem.exists(Paths.txt('freeplayList')) && FileSystem.exists(Paths.txt('freeplayList')))
+		{
+			initSongList = File.getContent(Paths.txt('freeplayList')).trim().split('\n');
+
+			for (i in 0...initSongList.length)
+				initSongList[i] = initSongList[i].trim();
+		}
+		else
+			initSongList = CoolUtil.coolTextFile(Paths.txt('freeplayList'));
+
+		for (i in 0...initSongList.length)
+		{
+			var data:Array<String> = initSongList[i].split('::');
+			songs.push(new SongMetadata(data[0], Std.parseInt(data[1]), data[2]));
+		}
+		#else
 		addSong('Test', 1, 'bf-pixel');
-
-		// LOAD MUSIC
-
-		// LOAD CHARACTERS
+		#end
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		add(bg);
