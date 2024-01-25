@@ -98,16 +98,17 @@ class CharacterEditorState extends MusicBeatState
 
 	function addAnimationsUI()
 	{
+		// coming soon!
 	}
 
 	function loadChar(?name:String)
 	{
 		if (name == null)
 		{
-			// if (PlayState.SONG != null)
-			// 	daAnim = PlayState.SONG.player2;
-			// else
-			name = 'bf';
+			/*if (PlayState.SONG != null)
+				daAnim = PlayState.SONG.player2;
+			else*/
+				name = 'bf';
 		}
 
 		var index:Int = -1;

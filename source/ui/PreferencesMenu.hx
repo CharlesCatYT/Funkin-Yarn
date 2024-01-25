@@ -27,7 +27,27 @@ class PreferencesMenu extends Page
 		['objects counter', 'obj-counter', false], ['fps watermark', 'watermark-counter', false]
 		#end
 	];
+	//public static var isFloatMap:Map<String, Bool> = new Map();
 
+	/*var descs:Array<String> = [
+			"",
+			"Makes it so your mom doesn't kick your ass.",
+			'Makes it flash the selected item in the main menu.',
+			"If unchecked, hitting \"Sick!\" notes won't show particles.",
+			'If unchecked, the camera won\'t zoom in on a beat hit',
+			"Makes it so the camera follows the characters' offsets.",
+			"What do you expect it to do? Lol."
+			"",
+			'Makes it so notes go down instead of up, simple enough.',
+			"If checked, you won't get misses from pressing keys, even if there's no notes to hit.",
+			"If checked, it'll display lane underlays.",
+			"",
+			"If checked, the game will pause itself, whenever the window is unfocused.",
+			"If checked, the game will be rendered by the GPU, instead of the CPU. Don't turn this on if you have a shitty graphics card."
+			#if !mobile 'If checked, it removes the jagged edges of sprites, at the cost of preformance.', 'A debug counter, explains itself.',
+			'A debug counter, explains itself.', 'A debug counter, explains itself.', 'A debug counter, explains itself.',
+			'A debug counter, explains itself.' #else 'If checked, it removes the jagged edges of sprites, at the cost of preformance.' #end
+		]; */
 	static var save:FlxSave;
 
 	// first item: title of the section;
@@ -58,6 +78,9 @@ class PreferencesMenu extends Page
 	var menuCamera:FNFCamera;
 	var items:TextMenuList;
 
+	/*var descNameText:FlxText;
+		var descText:FlxText;
+		var coolFloatText:FlxText; */
 	override public function new()
 	{
 		super();
@@ -98,6 +121,23 @@ class PreferencesMenu extends Page
 		{
 			menuCamera.camFollow.y = item.y;
 		});
+
+		/*var descBorder = new FlxSprite(0, 0).makeGraphic(400, 720, 0x99000000);
+			add(descBorder);
+			descBorder.x = FlxG.width - descBorder.width;
+			descNameText = new FlxText(descBorder.x, 0, descBorder.width, '');
+			descNameText.setFormat(Paths.font("vcr.ttf"), 36, FlxColor.WHITE, LEFT);
+			add(descNameText);
+			descText = new FlxText(descBorder.x, 64, descBorder.width, '');
+			descText.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, LEFT);
+			add(descText); */
+		/*coolFloatText = new FlxText(descBorder.x, 120, descBorder.width, '< 1 >');
+			coolFloatText.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER);
+			add(coolFloatText); */
+		/*descBorder.scrollFactor.set();
+			descNameText.scrollFactor.set();
+			descText.scrollFactor.set(); */
+		// coolFloatText.scrollFactor.set();
 	}
 
 	inline public static function getPref(pref:String)
@@ -136,29 +176,30 @@ class PreferencesMenu extends Page
 			setPref(identifier, defaultValue);
 	}
 
-	public function createPrefItem(y:Float, label:String, identifier:String, value:Dynamic)
+	public function createPrefItem(y:Float, label:String, identifier, value:Dynamic)
 	{
 		items.createItem(120, y, label, AtlasFont.Bold, function()
 		{
 			preferenceCheck(identifier, value);
-			if (Type.typeof(value) == TBool)
+
+			switch (Type.typeof(value).getName())
 			{
-				prefToggle(identifier);
+				case 'TBool':
+					prefToggle(identifier);
+				default:
+					// trace('swag');
 			}
-			// else
-			// {
-			// 	trace('swag');
-			// }
 		});
-		if (Type.typeof(value) == TBool)
+
+		switch (Type.typeof(value).getName())
 		{
-			createCheckbox(identifier, y);
+			case 'TBool':
+				createCheckbox(identifier, y);
+			/*case 'TFloat':
+				isFloatMap.set(identifier, true);*/
+			default:
+				// trace('swag');
 		}
-		// else
-		// {
-		// 	trace('swag');
-		// }
-		// trace(Type.typeof(value));
 	}
 
 	public function createCheckbox(identifier:String, y:Float)
@@ -216,6 +257,10 @@ class PreferencesMenu extends Page
 			{
 				if (item == items.members[items.selectedIndex])
 					item.x = 150;
+					// descNameText.text = item.label.text;
+				// descText.text = descs[item.ID];
+				/*else if (isFloatMap.get(item.label.text))
+					item.x = 20;*/
 				else
 					item.x = 120;
 			});
