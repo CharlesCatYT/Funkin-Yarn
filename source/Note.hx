@@ -138,6 +138,7 @@ class Note extends FlxSprite
 				case 3:
 					animation.play('redScroll');
 			}
+			
 		}
 		else if (prevNote != null)
 		{

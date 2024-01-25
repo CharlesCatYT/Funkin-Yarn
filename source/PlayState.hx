@@ -150,6 +150,7 @@ class PlayState extends MusicBeatState
 	var songScore:Int = 0;
 	var songMisses:Int = 0;
 	var scoreTxt:FlxText;
+	var scoreTxtTween:FlxTween;
 
 	var hitMap:Map<String, Int> = new Map<String, Int>();
 
@@ -227,7 +228,14 @@ class PlayState extends MusicBeatState
 			case 'thorns':
 				dialogue = CoolUtil.coolTextFile(Paths.dialogue('thorns'));
 			default: // auto detection for dialogue!!! WOW!!!!!
-				dialogue = CoolUtil.coolTextFile(Paths.dialogue(SONG.song.toLowerCase()));
+				try
+				{
+					dialogue = CoolUtil.coolTextFile(Paths.dialogue(SONG.song.toLowerCase()));
+				}
+				catch (ex:Any)
+				{
+					dialogue = null;
+				}
 		}
 
 		#if discord_rpc
@@ -868,11 +876,11 @@ class PlayState extends MusicBeatState
 		// healthBar
 		add(healthBar);
 
-		iconP1 = new HealthIcon(SONG.player1, true, true);
+		iconP1 = new HealthIcon(SONG.player1, true);
 		iconP1.y = healthBar.y - (iconP1.height / 2);
 		add(iconP1);
 
-		iconP2 = new HealthIcon(SONG.player2, false, true);
+		iconP2 = new HealthIcon(SONG.player2, false);
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 		add(iconP2);
 
@@ -1399,6 +1407,11 @@ class PlayState extends MusicBeatState
 		if (startingSong && startedCountdown && Conductor.songPosition >= 0)
 			startSong();
 
+		if (FlxG.keys.justPressed.NINE)
+		{
+			iconP1.swapOldIcon();
+		}
+
 		switch (curStage)
 		{
 			case 'philly':
@@ -1486,10 +1499,14 @@ class PlayState extends MusicBeatState
 		if (FlxG.keys.justPressed.SIX)
 			playerStrumline.botplay = !playerStrumline.botplay;
 
-		// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
-		// FlxG.watch.addQuick('VOLRight', vocals.amplitudeRight);
+		iconP1.setGraphicSize(Std.int(FlxMath.lerp(150, iconP1.width, CoolUtil.boundTo(1 - (elapsed * 30), 0, 1))));
+		iconP2.setGraphicSize(Std.int(FlxMath.lerp(150, iconP2.width, CoolUtil.boundTo(1 - (elapsed * 30), 0, 1))));
+
+		iconP1.updateHitbox();
+		iconP2.updateHitbox();
 
 		var iconOffset:Int = 26;
+
 		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
 		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
 
@@ -1785,6 +1802,19 @@ class PlayState extends MusicBeatState
 			songScore += daRating.score;
 			totalPlayed++;
 			recalculateRating();
+
+			if (scoreTxtTween != null)
+			{
+				scoreTxtTween.cancel();
+			}
+			scoreTxt.scale.x = 1.1;
+			scoreTxt.scale.y = 1.1;
+			scoreTxtTween = FlxTween.tween(scoreTxt.scale, {x: 1, y: 1}, 0.2, {
+				onComplete: function(twn:FlxTween)
+				{
+					scoreTxtTween = null;
+				}
+			});
 		}
 		if (daRating.splash && PreferencesMenu.getPref('note-splashes'))
 			playerStrumline.spawnSplash(note.noteData);
@@ -2393,8 +2423,11 @@ class PlayState extends MusicBeatState
 				bumpCams();
 		}
 
-		iconP1.bounce();
-		iconP2.bounce();
+		iconP1.setGraphicSize(Std.int(iconP1.width + 30));
+		iconP2.setGraphicSize(Std.int(iconP2.width + 30));
+
+		iconP1.updateHitbox();
+		iconP2.updateHitbox();
 
 		beatDance();
 

@@ -702,7 +702,8 @@ class Character extends FNFSprite
 						|| (curCharacter != 'tankman' || !animation.curAnim.name.endsWith('DOWN-alt')))
 					{
 						if (simpleIdle)
-							playAnim('idle');
+							if(!curCharacter.endsWith('-dead'))
+								playAnim('idle');
 						else
 						{
 							danced = !danced;

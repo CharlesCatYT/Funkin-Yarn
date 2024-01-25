@@ -7,13 +7,11 @@ class HealthIcon extends AttachedSprite
 	public var char:String;
 	public var isPlayer:Bool = false;
 	public var isOldIcon:Bool = false;
-	public var canBounce:Bool = false;
 
-	public function new(char:String = 'bf', isPlayer:Bool = false, canBounce:Bool = false)
+	public function new(char:String = 'bf', isPlayer:Bool = false)
 	{
 		super();
 		this.isPlayer = isPlayer;
-		this.canBounce = canBounce;
 		offsetY = -30;
 		changeIcon(char);
 		antialiasing = PreferencesMenu.getPref('antialiasing');
@@ -22,13 +20,6 @@ class HealthIcon extends AttachedSprite
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-
-		if (canBounce)
-		{
-			var mult:Float = CoolUtil.coolLerp(1, scale.x, 0.2, true);
-			scale.set(mult, mult);
-			updateHitbox();
-		}
 	}
 
 	public function swapOldIcon()
@@ -56,11 +47,5 @@ class HealthIcon extends AttachedSprite
 			animation.play(char);
 			this.char = char;
 		}
-	}
-
-	public function bounce()
-	{
-		if (canBounce)
-			setGraphicSize(Std.int(width + 30));
 	}
 }
