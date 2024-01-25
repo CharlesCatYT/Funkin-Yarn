@@ -27,6 +27,7 @@ using StringTools;
 class MainMenuState extends MusicBeatState
 {
 	public static final version:String = '0.1.0-alpha';
+
 	var menuItems:MainMenuList;
 
 	var magenta:FlxSprite;
