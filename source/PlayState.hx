@@ -973,7 +973,7 @@ class PlayState extends MusicBeatState
 	{
 		playCutscene(video, false, function()
 		{
-			FlxTween.tween(camGame, {zoom: defaultCamZoom}, (Conductor.stepCrochet / 1000) * 5, {ease: FlxEase.quadInOut});
+			FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.crochet / 1000) * 5, {ease: FlxEase.quadInOut});
 			cameraMovement(true);
 		});
 		if (zoom)

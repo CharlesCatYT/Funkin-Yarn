@@ -158,7 +158,7 @@ class Character extends FNFSprite
 
 				playAnim('danceRight');
 
-			case 'dad':
+			/*case 'dad':
 				// DAD ANIMATION LOADING CODE
 				tex = Paths.getSparrowAtlas('characters/DADDY_DEAREST');
 				frames = tex;
@@ -172,7 +172,7 @@ class Character extends FNFSprite
 
 				loadOffsetFile(curCharacter);
 
-				playAnim('idle');
+				playAnim('idle');*/
 			case 'spooky':
 				tex = Paths.getSparrowAtlas('characters/spooky_kids_assets');
 				frames = tex;

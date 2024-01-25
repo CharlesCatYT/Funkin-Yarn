@@ -6,10 +6,12 @@ import cpp.NativeGc;
 #if CRASH_HANDLER
 import haxe.CallStack;
 #if sys
-import sys.io.File;
 import sys.FileSystem;
+import sys.io.File;
+import sys.io.Process;
 #end
 import lime.app.Application;
+import haxe.io.Path;
 import openfl.events.UncaughtErrorEvent;
 #end
 #if discord_rpc
@@ -26,6 +28,12 @@ import ui.PreferencesMenu;
 
 using StringTools;
 
+#if linux
+@:cppInclude('./external/gamemode_client.h')
+@:cppFileCode('
+	#define GAMEMODE_AUTO
+')
+#end
 class Main extends Sprite
 {
 	static final gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
