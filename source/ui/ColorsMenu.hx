@@ -44,9 +44,9 @@ class ColorsMenu extends Page
 
 	override function update(elapsed:Float)
 	{
-		if (controls.UI_RIGHT_P)
+		if (PlayerSettings.player1.controls.UI_RIGHT_P)
 			curSelected += 1;
-		if (controls.UI_LEFT_P)
+		if (PlayerSettings.player1.controls.UI_LEFT_P)
 			curSelected -= 1;
 
 		if (curSelected < 0)
@@ -54,13 +54,13 @@ class ColorsMenu extends Page
 		if (curSelected >= grpNotes.members.length)
 			curSelected = 0;
 
-		if (controls.UI_UP)
+		if (PlayerSettings.player1.controls.UI_UP)
 		{
 			grpNotes.members[curSelected].colorSwap.update(elapsed * 0.3);
 			Note.arrowColors[curSelected] += elapsed * 0.3;
 		}
 
-		if (controls.UI_DOWN)
+		if (PlayerSettings.player1.controls.UI_DOWN)
 		{
 			grpNotes.members[curSelected].colorSwap.update(-elapsed * 0.3);
 			Note.arrowColors[curSelected] += -elapsed * 0.3;

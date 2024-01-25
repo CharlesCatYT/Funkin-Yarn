@@ -1671,7 +1671,7 @@ class PlayState extends MusicBeatState
 		else if (totalPlayed < 1)
 			rank = '?';
 
-		scoreTxt.text = 'Score: ' + songScore + scoreSeparator + 'Combo Breaks: ' + songMisses + scoreSeparator + 'Accuracy: '
+		scoreTxt.text = 'Score: ' + songScore + scoreSeparator + 'Misses: ' + songMisses + scoreSeparator + 'Accuracy: '
 			+ (rank != '?' ? '$floorAccuracy% [$rank]' : '?');
 	}
 
