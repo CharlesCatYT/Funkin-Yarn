@@ -178,10 +178,14 @@ class TitleState extends MusicBeatState
 		if (accept && !skippedIntro && initialized)
 			skipIntro();
 
-		if (controls.UI_LEFT)
-			swagShader.update(elapsed * 0.1);
-		if (controls.UI_RIGHT)
-			swagShader.update(-elapsed * 0.1);
+		if (swagShader != null)
+		{
+			if (controls.UI_LEFT)
+				swagShader.update(-elapsed * 0.1);
+
+			if (controls.UI_RIGHT)
+				swagShader.update(elapsed * 0.1);
+		}
 
 		super.update(elapsed);
 	}
