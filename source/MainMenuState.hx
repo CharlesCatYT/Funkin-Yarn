@@ -106,7 +106,7 @@ class MainMenuState extends MusicBeatState
 			item.y = pos + (160 * i);
 		}
 
-		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "FNF v" + FlxG.stage.application.meta.get('version') + " - Funkin' Yarn v" + version, 12);
+		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "FNF v" + FlxG.stage.application.meta.get('version') + ' - Funkin\' Yarn v$version', 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat(Paths.font('vcr.ttf'), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
