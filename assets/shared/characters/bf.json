@@ -2,6 +2,8 @@
     "imagePath": "characters/BOYFRIEND",
     "iconPath": "bf",
     "flipX": true,
+    "scale": 1,
+    "antialiasing": true,
     "animations": [
         {
             "name": "idle",
