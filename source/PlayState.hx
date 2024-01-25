@@ -3,9 +3,6 @@ package;
 #if hxCodec
 import hxcodec.flixel.FlxVideo;
 #end
-#if discord_rpc
-import Discord.DiscordClient;
-#end
 import Conductor.Rating;
 import Song.SwagSong;
 import openfl.events.KeyboardEvent;
@@ -227,7 +224,9 @@ class PlayState extends MusicBeatState
 			case 'thorns':
 				dialogue = CoolUtil.coolTextFile(Paths.dialogue('thorns'));
 			default: // auto detection for dialogue!!! WOW!!!!!
+			if (FileSystem.exists(Paths.dialogue(SONG.song.toLowerCase())) && FileSystem.exists(Paths.dialogue(SONG.song.toLowerCase())))
 				dialogue = CoolUtil.coolTextFile(Paths.dialogue(SONG.song.toLowerCase()));
+			else trace('no dialogue file for ${SONG.song.toLowerCase()} found, skipping it...');
 		}
 
 		#if discord_rpc

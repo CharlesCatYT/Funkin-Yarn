@@ -41,7 +41,7 @@ class DiscordClient
 			details: "In the Menus",
 			state: null,
 			largeImageKey: 'icon',
-			largeImageText: "Sofie Engine'"
+			largeImageText: "Yarn Engine'"
 		});
 	}
 
@@ -79,7 +79,7 @@ class DiscordClient
 			details: details,
 			state: state,
 			largeImageKey: 'icon',
-			largeImageText: "Sofie Engine'",
+			largeImageText: "Yarn Engine'",
 			smallImageKey: smallImageKey,
 			// Obtained times are in milliseconds so they are divided so Discord can use it
 			startTimestamp: Std.int(startTimestamp / 1000),
