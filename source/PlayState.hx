@@ -91,6 +91,9 @@ class PlayState extends MusicBeatState
 	private static var prevCamFollow:FlxPoint;
 	private static var prevCamFollowPos:FlxObject;
 
+	public var laneunderlay:FlxSprite;
+	public var laneunderlayOpponent:FlxSprite;
+
 	private var strumlines:Array<Strumline> = [];
 	private var opponentStrumline:Strumline;
 	private var playerStrumline:Strumline;
@@ -770,6 +773,28 @@ class PlayState extends MusicBeatState
 		var baseX:Float = FlxG.width / baseXShit;
 		var baseY:Int = PreferencesMenu.getPref('downscroll') ? FlxG.height - 150 : 50;
 
+		laneunderlayOpponent = new FlxSprite(0, 0).makeGraphic(500, FlxG.height * 2);
+		laneunderlayOpponent.x += 85;
+		laneunderlayOpponent.x += ((FlxG.width / 2) * 0);
+		laneunderlayOpponent.alpha = 1 - FlxG.save.data.laneTransparency;
+		laneunderlayOpponent.color = FlxColor.BLACK;
+		laneunderlayOpponent.scrollFactor.set();
+		laneunderlayOpponent.screenCenter(Y);
+
+		laneunderlay = new FlxSprite(0, 0).makeGraphic(500, FlxG.height * 2);
+		laneunderlay.x += 85;
+		laneunderlay.x += ((FlxG.width / 2) * 1);
+		laneunderlay.alpha = 1 - FlxG.save.data.laneTransparency;
+		laneunderlay.color = FlxColor.BLACK;
+		laneunderlay.scrollFactor.set();
+		laneunderlay.screenCenter(Y);
+
+		if (PreferencesMenu.getPref('lane-underlay'))
+		{
+			add(laneunderlayOpponent);
+			add(laneunderlay);
+		}
+
 		opponentStrumline = new Strumline(baseX, baseY, PreferencesMenu.getPref('downscroll'), true);
 		opponentStrumline.onNoteBotHit.add(function(note:Note)
 		{
@@ -863,6 +888,8 @@ class PlayState extends MusicBeatState
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
+		laneunderlay.cameras = [camHUD];
+		laneunderlayOpponent.cameras = [camHUD];
 		if (doof != null)
 			doof.cameras = [camHUD];
 
@@ -1391,6 +1418,8 @@ class PlayState extends MusicBeatState
 		}
 
 		super.update(elapsed);
+
+		scoreTxt.screenCenter(X);
 
 		if (controls.PAUSE && startedCountdown && canPause)
 		{

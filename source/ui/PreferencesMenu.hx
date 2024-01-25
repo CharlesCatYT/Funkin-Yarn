@@ -15,6 +15,7 @@ class PreferencesMenu extends Page
 		['camera follows char', 'camera-follow-char', true],
 		['stepmania clip style', 'sm-clip', false],
 		['downscroll', 'downscroll', false],
+		['lane underlay', 'lane-underlay', false],
 		['ghost tapping', 'ghost-tapping', true],
 		#if (desktop || web)
 		['auto pause', 'auto-pause', #if web false #else true #end],
@@ -41,7 +42,7 @@ class PreferencesMenu extends Page
 			'camera-follow-char',
 			'sm-clip'
 		],
-		['gameplay', 'downscroll', 'ghost-tapping'],
+		['gameplay', 'downscroll', 'ghost-tapping', 'lane-underlay'],
 		[
 			'misc',
 			#if (desktop || web)

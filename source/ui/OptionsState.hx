@@ -25,6 +25,7 @@ class OptionsState extends MusicBeatState
 		pages.set(defaultName, OptionsMenu);
 		pages.set('preferences', PreferencesMenu);
 		pages.set('controls', ControlsMenu);
+		pages.set('colors', ColorsMenu);
 		resetPage();
 		super.create();
 	}

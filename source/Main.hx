@@ -25,6 +25,9 @@ import flixel.FlxGame;
 import flixel.FlxState;
 import flixel.addons.transition.FlxTransitionableState;
 import ui.PreferencesMenu;
+#if linux
+import lime.graphics.Image;
+#end
 
 using StringTools;
 
@@ -69,7 +72,7 @@ class Main extends Sprite
 		if (hasEventListener(Event.ADDED_TO_STAGE))
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 
-		FlxG.save.bind('funkin', CoolUtil.getSavePath());
+		FlxG.save.bind('funkinyarn', CoolUtil.getSavePath());
 
 		#if polymod
 		ModHandler.init();
@@ -85,6 +88,11 @@ class Main extends Sprite
 			skipSplash, startFullscreen));
 
 		FlxG.mouse.visible = false;
+
+		#if linux
+		var icon = Image.fromFile("icon.png");
+		Lib.current.stage.window.setIcon(icon);
+		#end
 
 		#if !mobile
 		fpsCounter = new CoolCounter();
@@ -131,9 +139,9 @@ class Main extends Sprite
 	}
 
 	#if CRASH_HANDLER
-	static final crashHandlerDirectory:String = './crash';
+	static final crashHandlerDirectory:String = './crashes';
 
-	// crash handler made by sqirra-rng
+	// crash handler originally made by sqirra-rng
 	static function onCrash(e:UncaughtErrorEvent):Void
 	{
 		if (FlxG.sound != null)

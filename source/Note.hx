@@ -45,7 +45,12 @@ class Note extends FlxSprite
 
 	public var copyX:Bool = true;
 	public var copyY:Bool = true;
+
 	public var copyAngle:Bool = true;
+
+	public var colorSwap:ColorSwap;
+
+	public static var arrowColors:Array<Float> = [1, 1, 1, 1];
 
 	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, sustainNote:Bool = false)
 	{
@@ -116,6 +121,10 @@ class Note extends FlxSprite
 		}
 		updateHitbox();
 
+		colorSwap = new ColorSwap();
+		shader = colorSwap.shader;
+		updateColors();
+
 		if (!sustainNote)
 		{
 			switch (noteData)
@@ -161,6 +170,7 @@ class Note extends FlxSprite
 			}
 
 			updateHitbox();
+			updateColors();
 
 			offsetX -= width / 2;
 
@@ -186,6 +196,11 @@ class Note extends FlxSprite
 				prevNote.updateScale();
 			}
 		}
+	}
+
+	public function updateColors():Void
+	{
+		colorSwap.update(arrowColors[noteData]);
 	}
 
 	override function update(elapsed:Float)

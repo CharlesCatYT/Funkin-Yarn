@@ -180,6 +180,9 @@ class Strumline extends FlxGroup
 		for (i in 0...4)
 		{
 			var babyArrow:Receptor = new Receptor(x, y, i, downscroll);
+			var colorswap:ColorSwap = new ColorSwap();
+			babyArrow.shader = colorswap.shader;
+			colorswap.update(Note.arrowColors[i]);
 			receptors.add(babyArrow);
 			babyArrow.postAddedToGroup();
 		}

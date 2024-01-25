@@ -10,6 +10,7 @@ class OptionsMenu extends Page
 		add(items = new TextMenuList());
 		createLinkedItem('preferences');
 		createLinkedItem('controls');
+		createLinkedItem('colors');
 		createItem('exit', exit);
 	}
 
