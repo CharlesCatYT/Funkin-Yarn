@@ -617,7 +617,7 @@ class PlayState extends MusicBeatState
 				}
 		}
 
-		if (SONG.song.toLowerCase() == 'senpai' | 'roses' | 'thorns')
+		if (SONG.song.toLowerCase() == 'senpai' || 'roses' || 'thorns')
 			isPixelStage = true;
 		else
 			isPixelStage = false;

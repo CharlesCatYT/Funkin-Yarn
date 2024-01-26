@@ -12,8 +12,6 @@ class ColorsMenu extends Page
 
 	var grpNotes:FlxTypedGroup<Note>;
 
-	public static var arrowColors:Array<Float> = [1, 1, 1, 1];
-
 	public function new()
 	{
 		super();
