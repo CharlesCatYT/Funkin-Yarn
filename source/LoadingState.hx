@@ -6,7 +6,6 @@ import lime.app.Future;
 import lime.utils.AssetLibrary;
 import lime.utils.AssetManifest;
 import lime.utils.Assets as LimeAssets;
-import openfl.utils.Assets as OpenFlAssets;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.FlxSprite;
@@ -142,7 +141,10 @@ class LoadingState extends MusicBeatState
 
 	static function getNextState(target:FlxState, stopMusic = false):FlxState
 	{
-		Paths.setCurrentLevel("week" + PlayState.storyWeek);
+		switch(PlayState.storyWeek) {
+			default:
+				Paths.setCurrentLevel("week" + PlayState.storyWeek);
+		}
 		#if LOADING_SCREEN
 		var loaded = isSoundLoaded(getSongPath())
 			&& (!PlayState.SONG.needsVoices || isSoundLoaded(getVocalPath()))

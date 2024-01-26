@@ -1,1 +1,1 @@
-Test::1::bf-pixel
+Test:bf-pixel

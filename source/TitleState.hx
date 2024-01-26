@@ -150,14 +150,6 @@ class TitleState extends MusicBeatState
 
 		if (accept && !transitioning && skippedIntro)
 		{
-			// #if !switch
-			// // If it's Friday according to da clock
-			// if (Date.now().getDay() == 5)
-			// {
-			// 	// Unlock Friday medal
-			// }
-			// #end
-
 			if (titleText != null)
 				titleText.animation.play('press');
 
@@ -178,10 +170,14 @@ class TitleState extends MusicBeatState
 		if (accept && !skippedIntro && initialized)
 			skipIntro();
 
-		if (controls.UI_LEFT)
-			swagShader.update(elapsed * 0.1);
-		if (controls.UI_RIGHT)
-			swagShader.update(-elapsed * 0.1);
+		if (swagShader != null)
+		{
+			if (controls.UI_LEFT)
+				swagShader.update(-elapsed * 0.1);
+
+			if (controls.UI_RIGHT)
+				swagShader.update(elapsed * 0.1);
+		}
 
 		super.update(elapsed);
 	}

@@ -172,7 +172,8 @@ class Character extends FNFSprite
 
 				loadOffsetFile(curCharacter);
 
-				playAnim('idle');*/
+				playAnim('idle'); */
+
 			case 'spooky':
 				tex = Paths.getSparrowAtlas('characters/spooky_kids_assets');
 				frames = tex;
@@ -285,8 +286,7 @@ class Character extends FNFSprite
 				loadMappedAnims();
 
 			// case 'bf':
-			// 	tex = Paths.getSparrowAtlas('characters/BOYFRIEND');
-			// 	frames = tex;
+			// 	frames = Paths.getSparrowAtlas('characters/BOYFRIEND');
 			// 	quickAnimAdd('idle', 'BF idle dance');
 			// 	quickAnimAdd('singUP', 'BF NOTE UP0');
 			// 	quickAnimAdd('singLEFT', 'BF NOTE LEFT0');
@@ -297,11 +297,9 @@ class Character extends FNFSprite
 			// 	quickAnimAdd('singRIGHTmiss', 'BF NOTE RIGHT MISS');
 			// 	quickAnimAdd('singDOWNmiss', 'BF NOTE DOWN MISS');
 			// 	quickAnimAdd('hey', 'BF HEY');
-
 			// 	quickAnimAdd('firstDeath', "BF dies");
 			// 	animation.addByPrefix('deathLoop', "BF Dead Loop", 24, true);
 			// 	quickAnimAdd('deathConfirm', "BF Dead confirm");
-
 			// 	animation.addByPrefix('scared', 'BF idle shaking', 24, true);
 
 			// 	loadOffsetFile(curCharacter);
@@ -525,6 +523,8 @@ class Character extends FNFSprite
 				var path:String = Paths.getPath('characters/$curCharacter.json', TEXT);
 				if (Assets.exists(path, TEXT))
 					data = cast Json.parse(Assets.getText(path));
+				else
+					backupBoyfriend(); // just to prevent a crash ig
 
 				if (data != null)
 				{
@@ -587,6 +587,33 @@ class Character extends FNFSprite
 
 		if (isPlayer)
 			flipX = !flipX;
+	}
+
+	function backupBoyfriend()
+	{
+		frames = Paths.getSparrowAtlas('characters/BOYFRIEND');
+		quickAnimAdd('idle', 'BF idle dance');
+		quickAnimAdd('singUP', 'BF NOTE UP0');
+		quickAnimAdd('singLEFT', 'BF NOTE LEFT0');
+		quickAnimAdd('singRIGHT', 'BF NOTE RIGHT0');
+		quickAnimAdd('singDOWN', 'BF NOTE DOWN0');
+		quickAnimAdd('singUPmiss', 'BF NOTE UP MISS');
+		quickAnimAdd('singLEFTmiss', 'BF NOTE LEFT MISS');
+		quickAnimAdd('singRIGHTmiss', 'BF NOTE RIGHT MISS');
+		quickAnimAdd('singDOWNmiss', 'BF NOTE DOWN MISS');
+		quickAnimAdd('hey', 'BF HEY');
+		quickAnimAdd('firstDeath', "BF dies");
+		animation.addByPrefix('deathLoop', "BF Dead Loop", 24, true);
+		quickAnimAdd('deathConfirm', "BF Dead confirm");
+		animation.addByPrefix('scared', 'BF idle shaking', 24, true);
+
+		loadOffsetFile(curCharacter);
+
+		playAnim('idle');
+
+		flipX = true;
+
+		loadOffsetFile(curCharacter);
 	}
 
 	function loadMappedAnims()
@@ -702,16 +729,17 @@ class Character extends FNFSprite
 						|| (curCharacter != 'tankman' || !animation.curAnim.name.endsWith('DOWN-alt')))
 					{
 						if (simpleIdle)
-							playAnim('idle');
-						else
-						{
-							danced = !danced;
-
-							if (danced)
-								playAnim('danceRight');
+							if (!curCharacter.endsWith('-dead'))
+								playAnim('idle');
 							else
-								playAnim('danceLeft');
-						}
+							{
+								danced = !danced;
+
+								if (danced)
+									playAnim('danceRight');
+								else
+									playAnim('danceLeft');
+							}
 					}
 			}
 		}

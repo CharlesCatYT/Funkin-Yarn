@@ -90,6 +90,8 @@ class GameOverSubstate extends MusicBeatSubstate
 			FlxG.sound.music.stop();
 			lossSfx.stop();
 
+			remove(bf);
+
 			if (PlayState.isStoryMode)
 				Main.switchState(new StoryMenuState());
 			else

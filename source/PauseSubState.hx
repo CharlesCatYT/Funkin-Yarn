@@ -12,7 +12,7 @@ import flixel.util.FlxColor;
 class PauseSubState extends MusicBeatSubstate
 {
 	// do not make this static
-	final pauseOG:Array<String> = ['Resume', 'Restart Song', 'Exit to menu'];
+	final pauseOG:Array<String> = ['Resume', 'Restart Song', 'Loop Song', 'AB Repeat', 'Exit to menu'];
 
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
@@ -22,10 +22,12 @@ class PauseSubState extends MusicBeatSubstate
 	var curSelected:Int = 0;
 
 	var pauseMusic:FlxSound;
+	var loopCallback:Bool->Void;
+	var loopState:LoopState;
 
 	var practiceText:FlxText;
 
-	public function new()
+	public function new(loopCallback:Bool->Void, loopState:LoopState)
 	{
 		super();
 
@@ -96,6 +98,10 @@ class PauseSubState extends MusicBeatSubstate
 		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(deathCounter, {alpha: 1, y: deathCounter.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
 
+		this.loopCallback = loopCallback;
+		this.loopState = loopState;
+		updateLoopState();
+
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
 		add(grpMenuShit);
 
@@ -149,8 +155,7 @@ class PauseSubState extends MusicBeatSubstate
 			{
 				try
 				{
-					PlayState.SONG = Song.loadFromJson(PlayState.SONG.song.toLowerCase(),
-						Highscore.formatSong(PlayState.SONG.song.toLowerCase(), curSelected));
+					PlayState.SONG = Song.loadFromJson(PlayState.SONG.song.toLowerCase(), Highscore.formatSong(PlayState.SONG.song.toLowerCase(), curSelected));
 					PlayState.storyDifficulty = curSelected;
 					Main.switchState(new PlayState());
 				}
@@ -171,6 +176,12 @@ class PauseSubState extends MusicBeatSubstate
 					case "Change Difficulty":
 						menuItems = difficultyChoices;
 						regenMenu();
+					case "Loop Song":
+						loopCallback(false);
+						close();
+					case "AB Repeat":
+						loopCallback(true);
+						close();
 					case "Toggle Practice Mode":
 						PlayState.practiceMode = !PlayState.practiceMode;
 						practiceText.visible = PlayState.practiceMode;
@@ -190,6 +201,26 @@ class PauseSubState extends MusicBeatSubstate
 						regenMenu();
 				}
 			}
+		}
+	}
+
+	function updateLoopState()
+	{
+		FlxG.log.add(loopState);
+		switch (loopState)
+		{
+			case NONE:
+				menuItems[2] = 'Loop Song';
+				menuItems[3] = 'AB Repeat';
+			case REPEAT:
+				menuItems[2] = 'Stop Repeating';
+				menuItems[3] = 'AB Repeat';
+			case ANODE:
+				menuItems[2] = 'Cancel AB repeat';
+				menuItems[3] = 'Confirm B Node';
+			case ABREPEAT:
+				menuItems[2] = 'Loop Song';
+				menuItems[3] = 'Stop Repeating';
 		}
 	}
 

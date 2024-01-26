@@ -77,6 +77,16 @@ class CoolUtil
 			FlxG.sound.music.fadeIn(4, 0, 0.7);
 	}
 
+	inline public static function boundTo(value:Float, min:Float, max:Float):Float
+	{
+		var newValue:Float = value;
+		if (newValue < min)
+			newValue = min;
+		else if (newValue > max)
+			newValue = max;
+		return newValue;
+	}
+
 	public static function numberArray(max:Int, ?min:Int = 0):Array<Int>
 	{
 		var dumbArray:Array<Int> = [];
