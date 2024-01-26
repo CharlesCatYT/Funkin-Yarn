@@ -3,9 +3,6 @@ package;
 #if hxCodec
 import hxcodec.flixel.FlxVideo;
 #end
-#if discord_rpc
-import Discord.DiscordClient;
-#end
 import Conductor.Rating;
 import Song.SwagSong;
 import LoopState;
