@@ -144,6 +144,13 @@ class ChartingState extends MusicBeatState
 		dummyArrow = new FlxSprite().makeGraphic(GRID_SIZE, GRID_SIZE);
 		add(dummyArrow);
 
+		UI_box = new FlxUITabMenu(null, null, CoolUtil.makeUITabs(['Song', 'Section', 'Note']), null, true);
+		UI_box.resize(300, 400);
+		UI_box.x = FlxG.width / 2 + GRID_SIZE / 2;
+		UI_box.y = 25;
+		UI_box.scrollFactor.set();
+		add(UI_box);
+		
 		var tipText:FlxText = new FlxText(UI_box.x, UI_box.y + UI_box.height + 30, 0, "W/S or Mouse Wheel - Change Conductor's strum time
 			\nA or Left/D or Right - Go to the previous/next section
 			\nHold Shift to move 4x faster
@@ -157,13 +164,6 @@ class ChartingState extends MusicBeatState
 		tipText.borderSize = 2;
 		tipText.scrollFactor.set();
 		add(tipText);
-
-		UI_box = new FlxUITabMenu(null, null, CoolUtil.makeUITabs(['Song', 'Section', 'Note']), null, true);
-		UI_box.resize(300, 400);
-		UI_box.x = FlxG.width / 2 + GRID_SIZE / 2;
-		UI_box.y = 25;
-		UI_box.scrollFactor.set();
-		add(UI_box);
 
 		addSongUI();
 		addSectionUI();
