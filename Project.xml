@@ -25,7 +25,7 @@
 	<!-- ________________________________ Defines _______________________________ -->
 
 	<!--<define name="VIDEOS_ALLOWED" if="html5 || windows" unless="32bits"  />-->
-	<define name="LOADING_SCREEN"   />
+	<define name="LOADING_SCREEN" unless="html5" />
 	<define name="CRASH_HANDLER" if="html5 || desktop" />
 
 	<!-- _____________________________ Path Settings ____________________________ -->
