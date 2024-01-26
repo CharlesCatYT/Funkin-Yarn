@@ -13,7 +13,10 @@ class HealthIcon extends AttachedSprite
 		this.isPlayer = isPlayer;
 		offsetY = -30;
 		changeIcon(char);
-		antialiasing = PreferencesMenu.getPref('antialiasing');
+		if (char == 'bf-pixel' || char == 'spirit' || char == 'senpai')
+			antialiasing = false;
+		else
+			antialiasing = PreferencesMenu.getPref('antialiasing');
 	}
 
 	override function update(elapsed:Float)

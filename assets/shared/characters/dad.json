@@ -4,6 +4,7 @@
     "flipX": false,
     "scale": 1,
     "antialiasing": true,
+    "singDuration": 6.1,
     "animations": [
         {
             "name": "idle",

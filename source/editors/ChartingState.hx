@@ -6,7 +6,6 @@ import flixel.FlxSprite;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUICheckBox;
-import flixel.addons.ui.FlxUIDropDownMenu;
 import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.ui.FlxUINumericStepper;
 import flixel.addons.ui.FlxUITabMenu;
@@ -46,6 +45,7 @@ class ChartingState extends MusicBeatState
 	var GRID_SIZE:Int = 40;
 
 	private var blockPressWhileTypingOn:Array<FlxUIInputText> = [];
+	private var blockPressWhileScrolling:Array<FlxUIDropDownMenuCustom> = [];
 
 	var dummyArrow:FlxSprite;
 
@@ -69,12 +69,6 @@ class ChartingState extends MusicBeatState
 	var leftIcon:HealthIcon;
 	var rightIcon:HealthIcon;
 	var currentSongName:String;
-
-	function createUIInputTextsArray()
-	{
-		blockPressWhileTypingOn.push(UI_songTitle);
-		blockPressWhileTypingOn.push(strumTimeInputText);
-	}
 
 	override function create()
 	{
@@ -150,13 +144,6 @@ class ChartingState extends MusicBeatState
 		dummyArrow = new FlxSprite().makeGraphic(GRID_SIZE, GRID_SIZE);
 		add(dummyArrow);
 
-		UI_box = new FlxUITabMenu(null, null, CoolUtil.makeUITabs(['Song', 'Section', 'Note']), null, true);
-		UI_box.resize(300, 400);
-		UI_box.x = FlxG.width / 2 + GRID_SIZE / 2;
-		UI_box.y = 25;
-		UI_box.scrollFactor.set();
-		add(UI_box);
-
 		var tipText:FlxText = new FlxText(UI_box.x, UI_box.y + UI_box.height + 30, 0, "W/S or Mouse Wheel - Change Conductor's strum time
 			\nA or Left/D or Right - Go to the previous/next section
 			\nHold Shift to move 4x faster
@@ -171,10 +158,16 @@ class ChartingState extends MusicBeatState
 		tipText.scrollFactor.set();
 		add(tipText);
 
+		UI_box = new FlxUITabMenu(null, null, CoolUtil.makeUITabs(['Song', 'Section', 'Note']), null, true);
+		UI_box.resize(300, 400);
+		UI_box.x = FlxG.width / 2 + GRID_SIZE / 2;
+		UI_box.y = 25;
+		UI_box.scrollFactor.set();
+		add(UI_box);
+
 		addSongUI();
 		addSectionUI();
 		addNoteUI();
-		createUIInputTextsArray();
 
 		add(curRenderedNotes);
 		add(curRenderedSustains);
@@ -193,6 +186,7 @@ class ChartingState extends MusicBeatState
 	function addSongUI():Void
 	{
 		UI_songTitle = new FlxUIInputText(10, 10, 70, _song.song, 8);
+		blockPressWhileTypingOn.push(UI_songTitle);
 
 		var check_voices = new FlxUICheckBox(10, 25, null, null, "Has voice track", 100);
 		check_voices.checked = _song.needsVoices;
@@ -203,7 +197,7 @@ class ChartingState extends MusicBeatState
 			// trace('CHECKED!');
 		};
 
-		var check_mute_inst = new FlxUICheckBox(10, 200, null, null, "Mute Instrumental (in editor)", 100);
+		var check_mute_inst = new FlxUICheckBox(10, 240, null, null, "Mute Instrumental (in editor)", 100);
 		check_mute_inst.checked = false;
 		check_mute_inst.callback = function()
 		{
@@ -240,28 +234,31 @@ class ChartingState extends MusicBeatState
 
 		var characters:Array<String> = CoolUtil.coolTextFile(Paths.txt('characterList'));
 
-		var player1DropDown = new FlxUIDropDownMenu(10, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
+		var player1DropDown = new FlxUIDropDownMenuCustom(10, 160, FlxUIDropDownMenuCustom.makeStrIdLabelArray(characters, true), function(character:String)
 		{
 			_song.player1 = characters[Std.parseInt(character)];
 			updateHeads();
 		});
 		player1DropDown.selectedLabel = _song.player1;
+		blockPressWhileScrolling.push(player1DropDown);
 
-		var gfVersionDropDown = new FlxUIDropDownMenu(player1DropDown.x, player1DropDown.y + 20, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true),
-			function(character:String)
-			{
-				_song.gfVersion = characters[Std.parseInt(character)];
-				updateHeads();
-			});
-		gfVersionDropDown.selectedLabel = (_song.gfVersion == null ? 'gf' : _song.gfVersion);
-
-		var player2DropDown = new FlxUIDropDownMenu(player1DropDown.x, gfVersionDropDown.y + 20, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true),
+		var player2DropDown = new FlxUIDropDownMenuCustom(140, player1DropDown.y, FlxUIDropDownMenuCustom.makeStrIdLabelArray(characters, true),
 			function(character:String)
 			{
 				_song.player2 = characters[Std.parseInt(character)];
 				updateHeads();
 			});
 		player2DropDown.selectedLabel = _song.player2;
+		blockPressWhileScrolling.push(player2DropDown);
+
+		var gfVersionDropDown = new FlxUIDropDownMenuCustom(75, player1DropDown.y + 35, FlxUIDropDownMenuCustom.makeStrIdLabelArray(characters, true),
+			function(character:String)
+			{
+				_song.gfVersion = characters[Std.parseInt(character)];
+				updateHeads();
+			});
+		gfVersionDropDown.selectedLabel = (_song.gfVersion == null ? 'gf' : _song.gfVersion);
+		blockPressWhileScrolling.push(gfVersionDropDown);
 
 		var tab_group_song = new FlxUI(null, UI_box);
 		tab_group_song.name = "Song";
@@ -358,12 +355,13 @@ class ChartingState extends MusicBeatState
 		var tab_group_note = new FlxUI(null, UI_box);
 		tab_group_note.name = 'Note';
 
-		stepperSusLength = new FlxUINumericStepper(10, 10, Conductor.stepCrochet / 2, 0, 0, Conductor.stepCrochet * 16);
+		stepperSusLength = new FlxUINumericStepper(10, 25, Conductor.stepCrochet / 2, 0, 0, Conductor.stepCrochet * 16);
 		stepperSusLength.value = 0;
 		stepperSusLength.name = 'note_susLength';
 
 		strumTimeInputText = new FlxUIInputText(10, 65, 180, "0");
 		tab_group_note.add(strumTimeInputText);
+		blockPressWhileTypingOn.push(strumTimeInputText);
 
 		var applyLength:FlxButton = new FlxButton(100, 10, 'Apply');
 
@@ -546,7 +544,7 @@ class ChartingState extends MusicBeatState
 						}
 						else
 						{
-							// trace('tryin to delete note...');
+							trace('tryin to delete note...');
 							deleteNote(note);
 						}
 					}
@@ -577,17 +575,28 @@ class ChartingState extends MusicBeatState
 				dummyArrow.y = Math.floor(FlxG.mouse.y / GRID_SIZE) * GRID_SIZE;
 		}
 
-		var isTyping:Bool = false;
-		for (i in 0...blockPressWhileTypingOn.length)
+		var blockInput:Bool = false;
+		for (inputText in blockPressWhileTypingOn)
 		{
-			if (blockPressWhileTypingOn[i].hasFocus)
+			if (inputText.hasFocus)
 			{
-				isTyping = true;
+				blockInput = true;
 				break;
 			}
 		}
+		if (!blockInput)
+		{
+			for (dropDownMenu in blockPressWhileScrolling)
+			{
+				if (dropDownMenu.dropPanel.visible)
+				{
+					blockInput = true;
+					break;
+				}
+			}
+		}
 
-		if (!isTyping)
+		if (!blockInput)
 		{
 			if (FlxG.keys.justPressed.ENTER)
 			{
@@ -1037,13 +1046,9 @@ class ChartingState extends MusicBeatState
 
 	function deleteNote(note:Note):Void
 	{
-		var noteDataToCheck:Int = note.noteData;
-		if (noteDataToCheck > -1 && note.mustPress != _song.notes[curSection].mustHitSection)
-			noteDataToCheck += 4;
-
 		for (i in _song.notes[curSection].sectionNotes)
 		{
-			if (i[0] == note.strumTime && i[1] == noteDataToCheck)
+			if (i[0] == note.strumTime && i[1] % 4 == note.noteData)
 			{
 				if (i == curSelectedNote)
 					curSelectedNote = null;
