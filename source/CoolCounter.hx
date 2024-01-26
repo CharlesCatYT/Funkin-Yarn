@@ -97,10 +97,10 @@ class CoolCounter extends TextField
 			}
 
 			if (showObjectCount)
-				leText += 'Objects: ${FlxG.state != null ? FlxG.state.members.length : 0}';
+				leText += 'Objects: ${FlxG.state != null ? FlxG.state.members.length : 0}\n';
 
 			if (showFPSWatermark)
-				leText += 'Yarn v0.1.0 ALPHA';
+				leText += 'Yarn v0.1.0 ALPHA\n';
 
 			text = leText;
 

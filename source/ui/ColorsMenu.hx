@@ -12,6 +12,8 @@ class ColorsMenu extends Page
 
 	var grpNotes:FlxTypedGroup<Note>;
 
+	public static var arrowColors:Array<Float> = [1, 1, 1, 1];
+
 	public function new()
 	{
 		super();
@@ -32,11 +34,8 @@ class ColorsMenu extends Page
 			_effectSpr.x = i * 130;
 			_effectSpr.antialiasing = true;
 			_effectSpr.scale.x = _effectSpr.scale.y = 0.7;
-			// _effectSpr.setGraphicSize();
 			_effectSpr.height = note.height;
 			_effectSpr.width = note.width;
-
-			// _effectSpr.updateHitbox();
 
 			grpNotes.add(note);
 		}
@@ -64,6 +63,12 @@ class ColorsMenu extends Page
 		{
 			grpNotes.members[curSelected].colorSwap.update(-elapsed * 0.3);
 			Note.arrowColors[curSelected] += -elapsed * 0.3;
+		}
+
+		if (PlayerSettings.player1.controls.RESET)
+		{
+			trace('i reset my notes :D');
+			Note.arrowColors = [1, 1, 1, 1];
 		}
 
 		super.update(elapsed);
