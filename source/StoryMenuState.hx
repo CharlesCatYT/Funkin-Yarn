@@ -283,7 +283,7 @@ class StoryMenuState extends MusicBeatState
 				grpWeekText.members[curWeek].startFlashing();
 				unloadAssets();
 
-				grpWeekText.members[curWeek].week.animation.resume();
+				grpWeekText.members[curWeek].animation.resume();
 				grpWeekCharacters.members[1].animation.play('bfConfirm');
 				stopspamming = true;
 			}

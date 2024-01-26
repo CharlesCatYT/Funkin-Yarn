@@ -90,7 +90,6 @@ class GameOverSubstate extends MusicBeatSubstate
 			FlxG.sound.music.stop();
 			lossSfx.stop();
 
-			remove(camFollow);
 			remove(bf);
 
 			if (PlayState.isStoryMode)
