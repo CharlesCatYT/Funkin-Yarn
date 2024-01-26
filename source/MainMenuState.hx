@@ -33,6 +33,8 @@ class MainMenuState extends MusicBeatState
 	var magenta:FlxSprite;
 	var menuCamera:FNFCamera;
 
+	var trackedAssets:Array<Dynamic> = [];
+
 	override function create()
 	{
 		#if discord_rpc
@@ -120,6 +122,8 @@ class MainMenuState extends MusicBeatState
 
 	function startExitState(nextState:FlxState)
 	{
+		unloadAssets();
+
 		menuItems.enabled = false;
 		menuItems.forEachAlive(function(item:MainMenuItem)
 		{
@@ -146,6 +150,20 @@ class MainMenuState extends MusicBeatState
 			Main.switchState(new TitleState());
 
 		super.update(elapsed);
+	}
+
+	override function add(Object:flixel.FlxBasic):flixel.FlxBasic
+	{
+		trackedAssets.insert(trackedAssets.length, Object);
+		return super.add(Object);
+	}
+
+	function unloadAssets():Void
+	{
+		for (asset in trackedAssets)
+		{
+			remove(asset);
+		}
 	}
 }
 

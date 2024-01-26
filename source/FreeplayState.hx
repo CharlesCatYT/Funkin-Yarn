@@ -55,6 +55,7 @@ class FreeplayState extends MusicBeatState
 	public static var initSongList:Array<String> = [];
 
 	private var iconArray:Array<HealthIcon> = [];
+	var trackedAssets:Array<Dynamic> = [];
 
 	override function create()
 	{
@@ -259,6 +260,11 @@ class FreeplayState extends MusicBeatState
 			PlayState.storyDifficulty = curDifficulty;
 			PlayState.storyWeek = songs[curSelected].week;
 			LoadingState.loadAndSwitchState(new PlayState(), true);
+
+			unloadAssets();
+			FlxG.switchState(new PlayState());
+			if (FlxG.sound.music != null)
+				FlxG.sound.music.stop();
 		}
 	}
 
@@ -279,9 +285,7 @@ class FreeplayState extends MusicBeatState
 		if (curDifficulty > 2)
 			curDifficulty = 0;
 
-		#if !switch
 		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
-		#end
 
 		PlayState.storyDifficulty = curDifficulty;
 		diffText.text = '< ' + CoolUtil.difficultyString() + ' >';
@@ -319,9 +323,7 @@ class FreeplayState extends MusicBeatState
 		playThread.sendMessage(curSelected);
 		#end
 
-		#if !switch
 		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
-		#end
 
 		var bullShit:Int = 0;
 
@@ -379,6 +381,20 @@ class FreeplayState extends MusicBeatState
 		scoreBG.x = FlxG.width - scoreBG.scale.x / 2;
 		diffText.x = scoreBG.x + scoreBG.width / 2;
 		diffText.x -= diffText.width / 2;
+	}
+
+	override function add(Object:flixel.FlxBasic):flixel.FlxBasic
+	{
+		trackedAssets.insert(trackedAssets.length, Object);
+		return super.add(Object);
+	}
+
+	function unloadAssets():Void
+	{
+		for (asset in trackedAssets)
+		{
+			remove(asset);
+		}
 	}
 }
 

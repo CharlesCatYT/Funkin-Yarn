@@ -1,4 +1,7 @@
 import Paths;
+import flixel.*;
+import flixel.FlxBasic;
+import flixel.FlxG;
 import ui.PreferencesMenu;
 import shaders.ColorSwap;
 import openfl.utils.Assets as OpenFlAssets;
@@ -9,4 +12,5 @@ import Discord.DiscordClient;
 import sys.FileSystem;
 import sys.io.File;
 #end
+
 using StringTools;

@@ -150,14 +150,6 @@ class TitleState extends MusicBeatState
 
 		if (accept && !transitioning && skippedIntro)
 		{
-			// #if !switch
-			// // If it's Friday according to da clock
-			// if (Date.now().getDay() == 5)
-			// {
-			// 	// Unlock Friday medal
-			// }
-			// #end
-
 			if (titleText != null)
 				titleText.animation.play('press');
 

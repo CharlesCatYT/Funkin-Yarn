@@ -6,7 +6,6 @@ class HealthIcon extends AttachedSprite
 {
 	public var char:String;
 	public var isPlayer:Bool = false;
-	public var isOldIcon:Bool = false;
 
 	public function new(char:String = 'bf', isPlayer:Bool = false)
 	{
@@ -20,16 +19,6 @@ class HealthIcon extends AttachedSprite
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-	}
-
-	public function swapOldIcon()
-	{
-		isOldIcon = !isOldIcon;
-
-		if (isOldIcon)
-			changeIcon('bf-old');
-		else
-			changeIcon('bf');
 	}
 
 	public function changeIcon(char:String)
