@@ -1784,7 +1784,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		var scoreSeparator:String = ' / ';
+		var scoreSeparator:String = ' // ';
 		var rankSeparator:String = ' • ';
 
 		var rank:String = '?';
@@ -2281,6 +2281,9 @@ class PlayState extends MusicBeatState
 
 		function noteMiss(direction:Int, ?strumline:Strumline, ?note:Note, press:Bool = true):Void
 		{
+			if (PreferencesMenu.getPref('miss-shake'))
+				FlxG.camera.shake(0.0075, 0.1, null, true, X);
+
 			vocals.volume = 0;
 
 			if (press)

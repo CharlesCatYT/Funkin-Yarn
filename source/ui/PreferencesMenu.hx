@@ -8,11 +8,12 @@ class PreferencesMenu extends Page
 {
 	public static var preferences:Map<String, Dynamic> = new Map<String, Dynamic>();
 	static final defaultPreferences:Array<Array<Dynamic>> = [
-		['naughtyness', 'censor-naughty', true],
+		['censorship', 'censor-naughty', true],
 		['flashing menu', 'flashing-menu', true],
 		['note splashes', 'note-splashes', true],
 		['camera zooming on beat', 'camera-zoom', true],
 		['camera follows char', 'camera-follow-char', true],
+		['shake on miss', 'miss-shake', false],
 		['stepmania clip style', 'sm-clip', false],
 		['downscroll', 'downscroll', false],
 		['lane underlay', 'lane-underlay', false],
@@ -27,8 +28,8 @@ class PreferencesMenu extends Page
 		['objects counter', 'obj-counter', false], ['fps watermark', 'watermark-counter', false]
 		#end
 	];
-	//public static var isFloatMap:Map<String, Bool> = new Map();
 
+	// public static var isFloatMap:Map<String, Bool> = new Map();
 	/*var descs:Array<String> = [
 			"",
 			"Makes it so your mom doesn't kick your ass.",
@@ -60,6 +61,7 @@ class PreferencesMenu extends Page
 			'note-splashes',
 			'camera-zoom',
 			'camera-follow-char',
+			'miss-shake',
 			'sm-clip'
 		],
 		['gameplay', 'downscroll', 'ghost-tapping', 'lane-underlay'],
@@ -196,7 +198,7 @@ class PreferencesMenu extends Page
 			case 'TBool':
 				createCheckbox(identifier, y);
 			/*case 'TFloat':
-				isFloatMap.set(identifier, true);*/
+				isFloatMap.set(identifier, true); */
 			default:
 				// trace('swag');
 		}
@@ -258,9 +260,9 @@ class PreferencesMenu extends Page
 				if (item == items.members[items.selectedIndex])
 					item.x = 150;
 					// descNameText.text = item.label.text;
-				// descText.text = descs[item.ID];
+					// descText.text = descs[item.ID];
 				/*else if (isFloatMap.get(item.label.text))
-					item.x = 20;*/
+					item.x = 20; */
 				else
 					item.x = 120;
 			});
