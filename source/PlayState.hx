@@ -1546,6 +1546,7 @@ class PlayState extends MusicBeatState
 		}
 		timeScale = timeScale < 0.1 ? 0.1 : timeScale > 16 ? 16 : timeScale;
 		FlxG.timeScale = timeScale;
+		#end
 
 		super.update(elapsed);
 
@@ -2633,4 +2634,4 @@ class PlayState extends MusicBeatState
 				remove(asset);
 			}
 		}
-		}
+	}
