@@ -461,6 +461,7 @@ class PlayState extends MusicBeatState
 			case 'senpai' | 'roses':
 				{
 					curStage = 'school';
+					isPixelStage = true;
 
 					var bgSky = new FlxSprite().loadGraphic(Paths.image('weeb/weebSky'));
 					bgSky.scrollFactor.set(0.1, 0.1);
@@ -525,6 +526,7 @@ class PlayState extends MusicBeatState
 				}
 			case 'thorns':
 				{
+					isPixelStage = true;
 					curStage = 'schoolEvil';
 
 					var bg:FlxSprite = new FlxSprite(400, 200);
@@ -613,11 +615,6 @@ class PlayState extends MusicBeatState
 					add(stageCurtains);
 				}
 		}
-
-		if (SONG.song.toLowerCase() == 'senpai' || 'roses' || 'thorns')
-			isPixelStage = true;
-		else
-			isPixelStage = false;
 
 		GameOverSubstate.resetVariables();
 
@@ -1826,6 +1823,8 @@ class PlayState extends MusicBeatState
 		vocals.stop();
 		Highscore.saveScore(SONG.song, songScore, storyDifficulty);
 
+		isPixelStage = false; // idk I just have to do this so it doesn't break after playing a week 6 song :shrug:
+		
 		if (isStoryMode)
 		{
 			campaignScore += songScore;
