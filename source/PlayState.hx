@@ -794,7 +794,7 @@ class PlayState extends MusicBeatState
 		laneunderlayOpponent = new FlxSprite(0, 0).makeGraphic(500, FlxG.height * 2);
 		laneunderlayOpponent.x += 85;
 		laneunderlayOpponent.x += ((FlxG.width / 2) * 0);
-		laneunderlayOpponent.alpha = 1 - FlxG.save.data.laneTransparency;
+		laneunderlayOpponent.alpha = 50;
 		laneunderlayOpponent.color = FlxColor.BLACK;
 		laneunderlayOpponent.scrollFactor.set();
 		laneunderlayOpponent.screenCenter(Y);
@@ -802,7 +802,7 @@ class PlayState extends MusicBeatState
 		laneunderlay = new FlxSprite(0, 0).makeGraphic(500, FlxG.height * 2);
 		laneunderlay.x += 85;
 		laneunderlay.x += ((FlxG.width / 2) * 1);
-		laneunderlay.alpha = 1 - FlxG.save.data.laneTransparency;
+		laneunderlay.alpha = 50;
 		laneunderlay.color = FlxColor.BLACK;
 		laneunderlay.scrollFactor.set();
 		laneunderlay.screenCenter(Y);
