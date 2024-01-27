@@ -616,7 +616,7 @@ class ChartingState extends MusicBeatState
 
 		strumLine.y = getYfromStrum((Conductor.songPosition - sectionStartTime()) / curZoom % (Conductor.stepCrochet * _song.notes[curSection].lengthInSteps));
 
-		if (FlxG.keys.justPressed.X)
+		if (FlxG.keys.justPressed.J)
 			toggleAltAnimNote();
 
 		if (curBeat % 4 == 0 && curStep >= 16 * (curSection + 1))
@@ -1052,6 +1052,10 @@ class ChartingState extends MusicBeatState
 		{
 			if (curSelectedNote[3] != null)
 			{
+				if (FlxG.random.bool(40))
+					trace('heh, prety good.');
+				else
+					trace('ugh.');
 				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 				curSelectedNote[3] = !curSelectedNote[3];
 			}
