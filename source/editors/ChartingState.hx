@@ -466,6 +466,8 @@ class ChartingState extends MusicBeatState
 		tab_group_chart.add(waveformEnabled);
 		tab_group_chart.add(waveformUseInstrumental);
 		#end
+
+		UI_box.addGroup(tab_group_chart);
 	}
 
 	function loadSong(daSong:String):Void
