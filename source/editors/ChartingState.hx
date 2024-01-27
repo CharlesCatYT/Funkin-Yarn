@@ -160,7 +160,7 @@ class ChartingState extends MusicBeatState
 		dummyArrow = new FlxSprite().makeGraphic(GRID_SIZE, GRID_SIZE);
 		add(dummyArrow);
 
-		UI_box = new FlxUITabMenu(null, null, CoolUtil.makeUITabs(['Song', 'Section', 'Note']), null, true);
+		UI_box = new FlxUITabMenu(null, null, CoolUtil.makeUITabs(['Song', 'Charting', 'Section', 'Note']), null, true);
 		UI_box.resize(300, 400);
 		UI_box.x = FlxG.width / 2 + GRID_SIZE / 2;
 		UI_box.y = 25;
