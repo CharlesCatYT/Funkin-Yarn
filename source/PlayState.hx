@@ -1636,9 +1636,15 @@ class PlayState extends MusicBeatState
 		{
 			playerStrumline.botplay = !playerStrumline.botplay;
 			if (playerStrumline.botplay == true)
+			{
 				botplayMode = true;
+				botplayTxt.visible = true;
+			}
 			else
+			{
 				botplayMode = false;
+				botplayTxt.visible = false;
+			}
 		}
 
 		iconP1.setGraphicSize(Std.int(FlxMath.lerp(150, iconP1.width, CoolUtil.boundTo(1 - (elapsed * 30), 0, 1))));

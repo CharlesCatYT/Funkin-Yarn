@@ -729,17 +729,19 @@ class Character extends FNFSprite
 						|| (curCharacter != 'tankman' || !animation.curAnim.name.endsWith('DOWN-alt')))
 					{
 						if (simpleIdle)
+						{
 							if (!curCharacter.endsWith('-dead'))
 								playAnim('idle');
-							else
-							{
-								danced = !danced;
+						}
+						else
+						{
+							danced = !danced;
 
-								if (danced)
-									playAnim('danceRight');
-								else
-									playAnim('danceLeft');
-							}
+							if (danced)
+								playAnim('danceRight');
+							else
+								playAnim('danceLeft');
+						}
 					}
 			}
 		}
