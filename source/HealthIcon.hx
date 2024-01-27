@@ -33,7 +33,11 @@ class HealthIcon extends AttachedSprite
 		{
 			if (!animation.exists(char))
 			{
-				loadGraphic(Paths.image('icons/icon-' + char), true, 150, 150);
+				var name:String = 'icons/icon-' + char;
+				if (!Paths.fileExists('images/' + name + '.png', IMAGE))
+					name = 'icons/icon-face'; // no more of these icon crashes!!!!!!!!! :D
+				var file:Dynamic = Paths.image(name);
+				loadGraphic(file, true, 150, 150);
 				animation.add(char, [0, 1], 0, false, isPlayer);
 			}
 			animation.play(char);

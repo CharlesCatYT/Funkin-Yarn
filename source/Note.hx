@@ -52,7 +52,7 @@ class Note extends FlxSprite
 
 	public static var arrowColors:Array<Float> = [1, 1, 1, 1];
 
-	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, sustainNote:Bool = false)
+	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false)
 	{
 		super();
 
@@ -138,7 +138,6 @@ class Note extends FlxSprite
 				case 3:
 					animation.play('redScroll');
 			}
-			
 		}
 		else if (prevNote != null)
 		{

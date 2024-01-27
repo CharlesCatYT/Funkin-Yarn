@@ -130,6 +130,15 @@ class Paths
 		return getPath('videos/$key.mp4', BINARY, library);
 	}
 
+	inline static public function fileExists(key:String, type:AssetType, ?library:String)
+	{
+		if (OpenFlAssets.exists(getPath(key, type)))
+		{
+			return true;
+		}
+		return false;
+	}
+
 	inline static public function getSparrowAtlas(key:String, ?library:String, persistUntilClear:Bool = false)
 	{
 		return returnAtlas('images/$key', Sparrow, library, persistUntilClear);

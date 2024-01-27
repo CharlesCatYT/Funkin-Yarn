@@ -46,6 +46,7 @@ class PlayState extends MusicBeatState
 	public static var storyDifficulty:Int = 1;
 	public static var deathCounter:Int = 0;
 	public static var practiceMode:Bool = false;
+	public static var botplayMode:Bool = false;
 	public static var seenCutscene:Bool = false;
 
 	static var isFirstStorySong:Bool = true;
@@ -77,12 +78,13 @@ class PlayState extends MusicBeatState
 		return speed;
 	}
 
-	private var vocals:FlxSound;
+	public var vocals:FlxSound;
+
 	private var vocalsFinished = false;
 
-	private var dad:Character;
-	private var gf:Character;
-	private var boyfriend:Character;
+	public var dad:Character;
+	public var gf:Character;
+	public var boyfriend:Character;
 
 	private var allNotes:Array<Note> = [];
 	private var unspawnNotes:Array<Note> = [];
@@ -96,9 +98,9 @@ class PlayState extends MusicBeatState
 	public var laneunderlay:FlxSprite;
 	public var laneunderlayOpponent:FlxSprite;
 
-	private var strumlines:Array<Strumline> = [];
-	private var opponentStrumline:Strumline;
-	private var playerStrumline:Strumline;
+	public var strumlines:Array<Strumline> = [];
+	public var opponentStrumline:Strumline;
+	public var playerStrumline:Strumline;
 
 	private var camZooming:Bool = false;
 	private var curSong:String = "";
@@ -111,6 +113,9 @@ class PlayState extends MusicBeatState
 
 	private var generatedMusic:Bool = false;
 	private var startingSong:Bool = false;
+
+	var botplaySine:Float = 0;
+	var botplayTxt:FlxText;
 
 	private var iconP1:HealthIcon;
 	private var iconP2:HealthIcon;
@@ -904,6 +909,15 @@ class PlayState extends MusicBeatState
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
 
+		botplayTxt = new FlxText(400, 74, FlxG.width - 800, "[BOTPLAY]", 32);
+		botplayTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		botplayTxt.scrollFactor.set();
+		botplayTxt.borderSize = 2;
+		botplayTxt.visible = botplayMode;
+		add(botplayTxt);
+		if (PreferencesMenu.getPref('downscroll'))
+			botplayTxt.y = FlxG.height - 44 - 78;
+
 		for (strumline in strumlines)
 			strumline.cameras = [camHUD];
 		healthBar.cameras = [camHUD];
@@ -911,6 +925,7 @@ class PlayState extends MusicBeatState
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
+		botplayTxt.cameras = [camHUD];
 		laneunderlay.cameras = [camHUD];
 		laneunderlayOpponent.cameras = [camHUD];
 		if (doof != null)
@@ -1547,6 +1562,12 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
+		if (botplayTxt.visible)
+		{
+			botplaySine += 180 * elapsed;
+			botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
+		}
+
 		scoreTxt.screenCenter(X);
 
 		if (controls.PAUSE && startedCountdown && canPause)
@@ -1612,7 +1633,13 @@ class PlayState extends MusicBeatState
 
 		// forever engine moment
 		if (FlxG.keys.justPressed.SIX)
+		{
 			playerStrumline.botplay = !playerStrumline.botplay;
+			if (playerStrumline.botplay == true)
+				botplayMode = true;
+			else
+				botplayMode = false;
+		}
 
 		iconP1.setGraphicSize(Std.int(FlxMath.lerp(150, iconP1.width, CoolUtil.boundTo(1 - (elapsed * 30), 0, 1))));
 		iconP2.setGraphicSize(Std.int(FlxMath.lerp(150, iconP2.width, CoolUtil.boundTo(1 - (elapsed * 30), 0, 1))));
@@ -1805,7 +1832,7 @@ class PlayState extends MusicBeatState
 		else if (totalPlayed < 1)
 			rank = '?';
 
-		scoreTxt.text = 'Score: ' + songScore + scoreSeparator + 'Misses: ' + songMisses + scoreSeparator + 'Accuracy: '
+		scoreTxt.text = 'Score: $songScore $scoreSeparator Hits: $totalPlayed $scoreSeparator Misses: $songMisses $scoreSeparator Accuracy: '
 			+ (rank != '?' ? '$floorAccuracy% [$rank]' : '?');
 	}
 
@@ -1824,7 +1851,7 @@ class PlayState extends MusicBeatState
 		Highscore.saveScore(SONG.song, songScore, storyDifficulty);
 
 		isPixelStage = false; // idk I just have to do this so it doesn't break after playing a week 6 song :shrug:
-		
+
 		if (isStoryMode)
 		{
 			campaignScore += songScore;

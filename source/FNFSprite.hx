@@ -10,7 +10,11 @@ class FNFSprite extends FlxSprite
 	public function new(X:Float = 0, Y:Float = 0, ?SimpleGraphic:FlxGraphicAsset)
 	{
 		super(X, Y, SimpleGraphic);
+		#if (haxe >= "4.0.0")
+		animOffsets = new Map();
+		#else
 		animOffsets = new Map<String, Array<Float>>();
+		#end
 
 		antialiasing = PreferencesMenu.getPref('antialiasing');
 	}
