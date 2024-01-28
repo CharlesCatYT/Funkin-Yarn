@@ -86,8 +86,8 @@ class FreeplayState extends MusicBeatState
 		for (i in 0...initSongList.length)
 		{
 			var songArray:Array<String> = initSongList[i].split(":");
-			addSong(songArray[0], 0, songArray[1]);
-			songs[songs.length - 1].color = Std.parseInt(songArray[2]);
+			addSong(songArray[0], Std.parseInt(songArray[2]), songArray[3]);
+			songs[songs.length - 1].color = Std.parseInt(songArray[4]);
 		}
 		var colorsList = CoolUtil.coolTextFile(Paths.txt('freeplayColors'));
 		for (i in 0...colorsList.length)

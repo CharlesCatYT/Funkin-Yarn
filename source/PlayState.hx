@@ -1997,38 +1997,38 @@ class PlayState extends MusicBeatState
 		rating.cameras = [camRating];
 		insert(members.indexOf(opponentStrumline), rating);
 
-		// var comboSpr:FlxSprite = null;
-		// if (combo >= 10)
-		// {
-		// 	comboSpr = new FlxSprite(coolX, 0).loadGraphic(Paths.image(pixelShitPart1 + 'combo' + pixelShitPart2));
-		// 	comboSpr.screenCenter(Y);
-		// 	comboSpr.acceleration.y = 600;
-		// 	comboSpr.velocity.y -= 150;
-		// 	comboSpr.cameras = [camRating];
-		// 	comboSpr.velocity.x += FlxG.random.int(1, 10);
-		// 	insert(members.indexOf(opponentStrumline), comboSpr);
-		// }
+		var comboSpr:FlxSprite = null;
+		if (combo >= 10)
+		{
+			comboSpr = new FlxSprite(coolX, 0).loadGraphic(Paths.image(pixelShitPart1 + 'combo' + pixelShitPart2));
+			comboSpr.screenCenter(Y);
+			comboSpr.acceleration.y = 600;
+			comboSpr.velocity.y -= 150;
+			comboSpr.cameras = [camRating];
+			comboSpr.velocity.x += FlxG.random.int(1, 10);
+			insert(members.indexOf(opponentStrumline), comboSpr);
+		}
 
 		if (!isPixelStage)
 		{
 			rating.setGraphicSize(Std.int(rating.width * 0.7));
 			rating.antialiasing = PreferencesMenu.getPref('antialiasing');
-			// if (comboSpr != null)
-			// {
-			// 	comboSpr.setGraphicSize(Std.int(comboSpr.width * 0.7));
-			// 	comboSpr.antialiasing = PreferencesMenu.getPref('antialiasing');
-			// }
+			if (comboSpr != null)
+			{
+				comboSpr.setGraphicSize(Std.int(comboSpr.width * 0.7));
+				comboSpr.antialiasing = PreferencesMenu.getPref('antialiasing');
+			}
 		}
 		else
 		{
 			rating.setGraphicSize(Std.int(rating.width * daPixelZoom * 0.7));
-			// if (comboSpr != null)
-			// 	comboSpr.setGraphicSize(Std.int(comboSpr.width * daPixelZoom * 0.7));
+			if (comboSpr != null)
+				comboSpr.setGraphicSize(Std.int(comboSpr.width * daPixelZoom * 0.7));
 		}
 
 		rating.updateHitbox();
-		// if (comboSpr != null)
-		// 	comboSpr.updateHitbox();
+		if (comboSpr != null)
+			comboSpr.updateHitbox();
 
 		if (combo >= 10)
 		{
@@ -2082,16 +2082,16 @@ class PlayState extends MusicBeatState
 				rating.kill();
 				remove(rating, true);
 				rating.destroy();
-				// if (comboSpr != null)
-				// 	comboSpr.kill();
+				if (comboSpr != null)
+					comboSpr.kill();
 			},
 			startDelay: Conductor.crochet * 0.001
 		});
 
-		// if (comboSpr != null)
-		// 	FlxTween.tween(comboSpr, {alpha: 0}, 0.2, {
-		// 		startDelay: Conductor.crochet * 0.001
-		// 	});
+		if (comboSpr != null)
+			FlxTween.tween(comboSpr, {alpha: 0}, 0.2, {
+				startDelay: Conductor.crochet * 0.001
+			});
 	}
 
 	var camZoomTween:FlxTween;
@@ -2592,7 +2592,10 @@ class PlayState extends MusicBeatState
 		beatDance();
 
 		if (curBeat % 8 == 7 && curSong == 'Bopeebo')
+		{
 			boyfriend.playAnim('hey', true);
+			gf.playAnim('cheer', true);
+		}
 
 		if (curBeat % 16 == 15 && SONG.song == 'Tutorial' && dad.curCharacter == 'gf' && curBeat > 16 && curBeat < 48)
 		{

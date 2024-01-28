@@ -125,6 +125,7 @@ class ChartingState extends MusicBeatState
 		{
 			_song = {
 				song: 'Test',
+				// stage: 'stage',
 				notes: [],
 				bpm: 150,
 				needsVoices: true,
@@ -134,6 +135,10 @@ class ChartingState extends MusicBeatState
 				speed: 1
 			};
 		}
+
+		// make stage use the one thats present in PlayState
+		/*if (_song.stage == null)
+			_song.stage = PlayState.curStage; */
 
 		FlxG.mouse.visible = true;
 
@@ -175,6 +180,8 @@ class ChartingState extends MusicBeatState
 			\n
 			\nEnter - Test your chart
 			\nQ/E - Decrease/Increase Note Sustain Length
+			\nJ - Toggle Alt Animation Note (Used for Week 7)
+			\n Ctrl+S - Save chart
 			\nSpace - Stop/Resume song
 			\nR - Reset section\n", 16);
 		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -294,6 +301,15 @@ class ChartingState extends MusicBeatState
 		gfVersionDropDown.selectedLabel = (_song.gfVersion == null ? 'gf' : _song.gfVersion);
 		blockPressWhileScrolling.push(gfVersionDropDown);
 
+		/*var stages:Array<String> = CoolUtil.coolTextFile('assets/data/stageList.txt');
+
+			var stageDropDown = new FlxUIDropDownMenuCustom(10, 230, FlxUIDropDownMenu.makeStrIdLabelArray(stages, true), function(stage:String)
+			{
+				_song.stage = stages[Std.parseInt(stage)];
+			});
+
+			stageDropDown.selectedLabel = _song.stage; */
+
 		var tab_group_song = new FlxUI(null, UI_box);
 		tab_group_song.name = "Song";
 		tab_group_song.add(UI_songTitle);
@@ -303,6 +319,7 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(new FlxText(85, gfVersionDropDown.y - 15, 0, 'Girlfriend:'));
 		tab_group_song.add(new FlxText(20, player1DropDown.y - 15, 0, 'Boyfriend:'));
 		tab_group_song.add(new FlxText(150, player2DropDown.y - 15, 0, 'Opponent:'));
+		// tab_group_song.add(new FlxText(150, stageDropDown.y - 15, 0, 'Stage:'));
 		tab_group_song.add(saveButton);
 		tab_group_song.add(reloadSong);
 		tab_group_song.add(reloadSongJson);
@@ -313,6 +330,7 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(player2DropDown);
 		tab_group_song.add(player1DropDown);
 		tab_group_song.add(gfVersionDropDown);
+		// tab_group_song.add(stageDropDown);
 
 		UI_box.addGroup(tab_group_song);
 	}

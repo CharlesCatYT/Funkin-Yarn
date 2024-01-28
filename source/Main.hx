@@ -79,8 +79,8 @@ class Main extends Sprite
 		#end
 
 		#if (flixel < "5.0.0")
-		var stageWidth:Int = Lib.current.stage.stageWidth;
-		var stageHeight:Int = Lib.current.stage.stageHeight;
+		final stageWidth:Int = Lib.current.stage.stageWidth;
+		final stageHeight:Int = Lib.current.stage.stageHeight;
 		var zoom:Float = Math.min(stageWidth / gameWidth, stageHeight / gameHeight);
 		#end
 		addChild(new FlxGame(#if (flixel < "5.0.0") Math.ceil(stageWidth / zoom) #else gameWidth #end,

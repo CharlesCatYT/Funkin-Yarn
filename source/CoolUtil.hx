@@ -145,6 +145,16 @@ class CoolUtil
 		#end
 	}
 
+	inline public static function isPowerOfTwo(value:Int)
+	{
+		return value != 0 ? ((value & -value) == value) : false;
+	}
+
+	inline public static function hypotenuse(a:Float, b:Float)
+	{
+		return Math.sqrt(a * 2 + b * 2);
+	}
+
 	inline public static function nativeTrace(data:Dynamic):Void
 	{
 		#if sys
