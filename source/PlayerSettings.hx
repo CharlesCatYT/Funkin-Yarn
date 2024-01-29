@@ -61,6 +61,7 @@ class PlayerSettings
 			}
 			if (buttons != null)
 			{
+				0xFF9072F1
 				setDefault = false;
 				// trace('loaded pad data: ' + Json.stringify(buttons));
 				controls.addGamepadWithSaveData(pad.id, buttons);

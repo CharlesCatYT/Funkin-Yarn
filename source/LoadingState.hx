@@ -141,10 +141,39 @@ class LoadingState extends MusicBeatState
 
 	static function getNextState(target:FlxState, stopMusic = false):FlxState
 	{
-		switch(PlayState.storyWeek) {
+		// stage fallback so mods won't break
+		if (PlayState.SONG.stage == null)
+		{
+			switch (PlayState.SONG.song.toLowerCase())
+			{
+				case 'tutorial' | 'bopeebo' | 'fresh' | 'dadbattle':
+					PlayState.curStage = "stage";
+				case 'spookeez' | 'south' | 'monster':
+					PlayState.curStage = "spooky";
+				case 'pico' | 'philly' | 'blammed':
+					PlayState.curStage = "philly";
+				case 'satin-panties' | 'high' | 'milf':
+					PlayState.curStage = "limo";
+				case 'cocoa' | 'eggnog':
+					PlayState.curStage = "mall";
+				case 'winter-horrorland':
+					PlayState.curStage = "mall-evil";
+				case 'senpai' | 'roses':
+					PlayState.curStage = "school";
+				case 'thorns':
+					PlayState.curStage = "school-evil";
+				default:
+					PlayState.curStage = "stage";
+			}
+		}
+		else
+			PlayState.curStage = PlayState.SONG.stage;
+
+		Paths.setCurrentLevel(PlayState.curStage);
+		/*switch(PlayState.storyWeek) {
 			default:
 				Paths.setCurrentLevel("week" + PlayState.storyWeek);
-		}
+		}*/
 		#if LOADING_SCREEN
 		var loaded = isSoundLoaded(getSongPath())
 			&& (!PlayState.SONG.needsVoices || isSoundLoaded(getVocalPath()))

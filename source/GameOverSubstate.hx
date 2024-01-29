@@ -25,7 +25,7 @@ class GameOverSubstate extends MusicBeatSubstate
 	{
 		switch (PlayState.curStage)
 		{
-			case 'school' | 'schoolEvil':
+			case 'school' | 'school-evil':
 				character = 'bf-pixel-dead';
 				lossSound = 'fnf_loss_sfx-pixel';
 				startMusic = 'gameOver-pixel';

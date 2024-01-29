@@ -66,7 +66,7 @@ class Note extends FlxSprite
 
 		switch (PlayState.curStage)
 		{
-			case 'school' | 'schoolEvil':
+			case 'school' | 'school-evil':
 				if (sustainNote)
 				{
 					loadGraphic(Paths.image('pixelUI/arrowEnds'), true, 7, 6);

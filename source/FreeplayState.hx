@@ -75,18 +75,18 @@ class FreeplayState extends MusicBeatState
 			CoolUtil.resetMusic();
 		#end
 
-		addWeek(['Tutorial'], 0, ['gf']);
+		/*addWeek(['Tutorial'], 0, ['gf']);
 		addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], 1, ['dad']);
 		addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky', 'spooky', 'monster']);
 		addWeek(['Pico', 'Philly', 'Blammed'], 3, ['pico']);
 		addWeek(['Satin-Panties', 'High', 'Milf'], 4, ['mom']);
 		addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], 5, ['parents-christmas', 'parents-christmas', 'monster-christmas']);
 		addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
-		addWeek(['Ugh', 'Guns', 'Stress'], 7, ['tankman']);
+		addWeek(['Ugh', 'Guns', 'Stress'], 7, ['tankman']);*/
 		for (i in 0...initSongList.length)
 		{
 			var songArray:Array<String> = initSongList[i].split(":");
-			addSong(songArray[0], Std.parseInt(songArray[2]), songArray[3]);
+			addSong(songArray[0], songArray[2]);
 			songs[songs.length - 1].color = Std.parseInt(songArray[4]);
 		}
 		var colorsList = CoolUtil.coolTextFile(Paths.txt('freeplayColors'));
