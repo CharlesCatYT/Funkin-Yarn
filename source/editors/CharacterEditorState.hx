@@ -10,7 +10,6 @@ import flixel.util.FlxColor;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUITabMenu;
-import flixel.addons.ui.FlxUIDropDownMenu;
 
 using StringTools;
 
@@ -85,7 +84,7 @@ class CharacterEditorState extends MusicBeatState
 
 	function addCharacterUI()
 	{
-		var charDropDown = new FlxUIDropDownMenu(10, 10, FlxUIDropDownMenu.makeStrIdLabelArray(CoolUtil.coolTextFile(Paths.txt('characterList')), true),
+		var charDropDown = new FlxUIDropDownMenuCustom(10, 10, FlxUIDropDownMenuCustom.makeStrIdLabelArray(CoolUtil.coolTextFile(Paths.txt('characterList')), true),
 			loadChar);
 		charDropDown.selectedLabel = char.curCharacter;
 

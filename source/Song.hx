@@ -8,7 +8,7 @@ using StringTools;
 typedef SwagSong =
 {
 	var song:String;
-	// var stage:String;
+	var stage:String;
 	var notes:Array<SwagSection>;
 	var bpm:Float;
 	var needsVoices:Bool;

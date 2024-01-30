@@ -170,10 +170,10 @@ class LoadingState extends MusicBeatState
 			PlayState.curStage = PlayState.SONG.stage;
 
 		Paths.setCurrentLevel(PlayState.curStage);
-		/*switch(PlayState.storyWeek) {
+		switch(PlayState.storyWeek) {
 			default:
 				Paths.setCurrentLevel("week" + PlayState.storyWeek);
-		}*/
+		}
 		#if LOADING_SCREEN
 		var loaded = isSoundLoaded(getSongPath())
 			&& (!PlayState.SONG.needsVoices || isSoundLoaded(getVocalPath()))

@@ -37,7 +37,7 @@ class PlayState extends MusicBeatState
 {
 	public static var instance(default, null):PlayState;
 
-	public static var curStage:String = '';
+	public static var curStage:String;
 	public static var isPixelStage:Bool = false;
 	public static var SONG:SwagSong;
 	public static var isStoryMode:Bool = false;
@@ -48,8 +48,14 @@ class PlayState extends MusicBeatState
 	public static var practiceMode:Bool = false;
 	public static var botplayMode:Bool = false;
 	public static var seenCutscene:Bool = false;
+	public static var campaignScore:Int = 0;
+
+	// how big to stretch the pixel art assets
+	public static var daPixelZoom:Float = 6;
 
 	static var isFirstStorySong:Bool = true;
+
+	var gfVersion:String = 'gf';
 
 	public static function set_storyPlaylist(playlist:Array<String>)
 	{
@@ -161,12 +167,7 @@ class PlayState extends MusicBeatState
 
 	var hitMap:Map<String, Int> = new Map<String, Int>();
 
-	public static var campaignScore:Int = 0;
-
 	var defaultCamZoom:Float = 1.05;
-
-	// how big to stretch the pixel art assets
-	public static final daPixelZoom:Float = 6;
 
 	// toggle for old bf
 	public static var isBfOld:Bool = false;
@@ -267,12 +268,14 @@ class PlayState extends MusicBeatState
 		// To avoid having duplicate images in Discord assets
 		switch (iconRPC)
 		{
-			case 'senpai-angry':
-				iconRPC = 'senpai';
-			case 'monster-christmas':
-				iconRPC = 'monster';
+			case 'gf-christmas':
+				iconRPC = 'gf';
 			case 'mom-car':
 				iconRPC = 'mom';
+			case 'monster-christmas':
+				iconRPC = 'monster';
+			case 'senpai-angry':
+				iconRPC = 'senpai';
 		}
 
 		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
@@ -292,7 +295,7 @@ class PlayState extends MusicBeatState
 		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 		#end
 
-		switch (SONG.song.toLowerCase())
+		switch (curStage)
 		{
 			case 'spooky':
 				{

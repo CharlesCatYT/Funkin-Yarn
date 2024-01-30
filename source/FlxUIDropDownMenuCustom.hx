@@ -22,6 +22,8 @@ import flixel.addons.ui.FlxUI;
 
 
 /*
+
+From ShadowMario, I took this from Psych Engine, because there's mods with lotsa characters (that might soon use this engine) which make the need of this edit. Anyway,
 THIS IS AN EDIT OF FlxUIDropDownMenu I'VE MADE BECAUSE I'M TIRED OF IT NOT SUPPORTING SCROLLING UP/DOWN
 BAH!
 The differences are the following:
