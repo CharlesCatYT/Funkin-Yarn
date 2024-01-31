@@ -158,7 +158,7 @@ class ChartingState extends MusicBeatState
 		Conductor.changeBPM(_song.bpm);
 		Conductor.mapBPMChanges(_song);
 
-		bpmTxt = new FlxText(1000, 50, 0, "", 16);
+		bpmTxt = new FlxText(1060, 50, 0, "", 16);
 		bpmTxt.scrollFactor.set();
 		add(bpmTxt);
 
@@ -173,7 +173,7 @@ class ChartingState extends MusicBeatState
 
 		UI_box.scrollFactor.set();
 		UI_box.resize(300, 400);
-		UI_box.x = FlxG.width / 2.5 + GRID_SIZE / 2;
+		UI_box.x = 680 + GRID_SIZE / 2;
 		UI_box.y = 25;
 		UI_box.scrollFactor.set();
 		add(UI_box);
@@ -190,8 +190,8 @@ class ChartingState extends MusicBeatState
 			\n Ctrl+S - Save chart
 			\nSpace - Stop/Resume song
 			\nR - Reset section\n", 16);
-		tipText.setFormat(Paths.font("vcr.ttf"), 12, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		tipText.borderSize = 2;
+		tipText.setFormat(Paths.font("vcr.ttf"), 10, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		tipText.borderSize = 1.5;
 		tipText.scrollFactor.set();
 		add(tipText);
 
@@ -250,7 +250,7 @@ class ChartingState extends MusicBeatState
 
 		var loadAutosaveBtn:FlxButton = new FlxButton(reloadSongJson.x, reloadSongJson.y + 30, "Load Autosave", loadAutosave);
 
-		var clear_notes:FlxButton = new FlxButton(320, 310, 'Clear notes', function()
+		var clear_notes:FlxButton = new FlxButton(320, 310, 'Clear all notes', function()
 		{
 			for (sec in 0..._song.notes.length)
 			{
@@ -271,7 +271,7 @@ class ChartingState extends MusicBeatState
 			updateGrid();
 		});
 
-		var restartButton = new FlxButton(10, 140, "Reset", function()
+		var restartButton = new FlxButton(120, 310, "Reset Section", function()
 		{
 			for (ii in 0..._song.notes.length)
 			{
@@ -282,6 +282,7 @@ class ChartingState extends MusicBeatState
 			}
 			resetSection(true);
 		});
+
 		var stepperSpeed:FlxUINumericStepper = new FlxUINumericStepper(10, 110, 0.1, 1, 0.1, 25, 2);
 		stepperSpeed.value = _song.speed;
 		stepperSpeed.name = 'song_speed';
