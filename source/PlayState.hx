@@ -964,9 +964,13 @@ class PlayState extends MusicBeatState
 		// cameras = [FlxG.cameras.list[1]];
 
 		if (Assets.exists(Paths.scriptFile(SONG.song.toLowerCase())))
+		{
 			scriptThing = HScriptTool.create(Paths.scriptFile(SONG.song.toLowerCase()));
+			trace('found script! loading...');
+		}
 		else
 		{
+			trace('No script file found, skipping...');
 			scriptThing = null;
 			canRunScript = false;
 		}
@@ -1087,7 +1091,7 @@ class PlayState extends MusicBeatState
 		scriptThing.setVariable('FlxSound', flixel.sound.FlxSound);
 		scriptThing.setVariable('FlxTween', flixel.tweens.FlxTween);
 		scriptThing.setVariable('FlxEase', flixel.tweens.FlxEase);
-		scriptThing.setVariable('FlxColor', flixel.util.FlxColor);
+		// scriptThing.setVariable('FlxColor', flixel.util.FlxColor);
 		scriptThing.setVariable('FlxText', flixel.text.FlxText);
 		scriptThing.setVariable('FlxStringUtil', flixel.util.FlxStringUtil);
 		scriptThing.setVariable('YarnPrefs', ui.PreferencesMenu);
