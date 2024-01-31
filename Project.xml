@@ -95,6 +95,7 @@
 	<haxelib name="flixel-addons" />
 	<haxelib name="flixel-ui" />
 	<haxelib name="flxanimate" />
+	<haxelib name="hscript-improved" />
 
 	<!--<haxelib name="polymod" if="desktop" unless="neko" />-->
 	<haxelib name="discord_rpc" if="desktop" unless="neko" />
@@ -119,9 +120,13 @@
 	<!--For the crash handler-->
 	<haxedef name="HXCPP_CHECK_POINTER" if="CRASH_HANDLER" />
 	<haxedef name="HXCPP_STACK_LINE" if="CRASH_HANDLER" />
+	<haxedef name="HXCPP_STACK_TRACE" if="CRASH_HANDLER" />
 
 	<!--Enable HScript fine error reporting at parsing time-->
 	<haxedef name="hscriptPos" if="hscript" />
+
+	<haxeflag name="--macro" value="allowPackage('flash')" />
+	<haxeflag name="--macro" value="include('my.pack')" />
 
 	<!-- _________________________________ Custom _______________________________ -->
 

@@ -155,6 +155,12 @@ class CoolUtil
 		return Math.sqrt(a * 2 + b * 2);
 	}
 
+	public static function coolStringFile(path:String):String
+	{
+		var daString:String = Assets.getText(path).trim();
+		return daString;
+	}
+
 	inline public static function nativeTrace(data:Dynamic):Void
 	{
 		#if sys

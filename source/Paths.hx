@@ -120,6 +120,11 @@ class Paths
 		return getPreloadPath('fonts/$key');
 	}
 
+	inline static public function scriptFile(key:String, ?library:String)
+	{
+		return getPath('scripts/$key.hx', TEXT, library);
+	}
+
 	inline static public function fontName(key:String)
 	{
 		return Assets.getFont(font(key)).fontName;

@@ -7,6 +7,7 @@ import Conductor.Rating;
 import Song.SwagSong;
 import LoopState;
 import openfl.events.KeyboardEvent;
+import openfl.utils.Assets;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -30,6 +31,7 @@ import flixel.input.gamepad.FlxGamepad;
 import Strumline.Receptor;
 import shaders.BuildingShaders;
 import ui.PreferencesMenu;
+import HScriptTool.Script;
 
 using StringTools;
 
@@ -174,6 +176,10 @@ class PlayState extends MusicBeatState
 	var inCutscene:Bool = false;
 
 	var trackedAssets:Array<FlxBasic> = [];
+
+	var scriptThing:Dynamic;
+
+	public static var canRunScript:Bool;
 
 	#if discord_rpc
 	// Discord RPC variables
@@ -939,6 +945,7 @@ class PlayState extends MusicBeatState
 		botplayTxt.cameras = [camHUD];
 		laneunderlay.cameras = [camHUD];
 		laneunderlayOpponent.cameras = [camHUD];
+		yarnWatermark.cameras = [camHUD];
 		if (doof != null)
 			doof.cameras = [camHUD];
 
@@ -955,6 +962,51 @@ class PlayState extends MusicBeatState
 			Paths.sound('missnote' + i, null, true);
 
 		// cameras = [FlxG.cameras.list[1]];
+
+		if (Assets.exists(Paths.scriptFile(SONG.song.toLowerCase())))
+			scriptThing = HScriptTool.create(Paths.scriptFile(SONG.song.toLowerCase()));
+		else
+		{
+			scriptThing = null;
+			canRunScript = false;
+		}
+
+		scriptThing.setVariable("create", function()
+		{
+		});
+		scriptThing.setVariable("update", function(elapsed:Float)
+		{
+		});
+		scriptThing.setVariable("beatHit", function(curBeat:Int)
+		{
+		});
+		scriptThing.setVariable("stepHit", function(curStep:Int)
+		{
+		});
+		scriptThing.setVariable("startCountdown", function()
+		{
+		});
+		scriptThing.setVariable("startSong", function()
+		{
+		});
+		scriptThing.setVariable("destroy", function()
+		{
+		});
+		scriptThing.setVariable("recalculateRating", function()
+		{
+		});
+		scriptThing.setVariable("endSong", function()
+		{
+		});
+		scriptThing.setVariable("popUpScore", function()
+		{
+		});
+
+		initScript();
+		scriptThing.loadFile();
+
+		scriptThing.executeFunc("create");
+
 		startingSong = true;
 
 		if (isStoryMode && !seenCutscene)
@@ -1021,6 +1073,37 @@ class PlayState extends MusicBeatState
 		super.create();
 
 		Cache.clearUnused();
+	}
+
+	function initScript()
+	{
+		scriptThing.setVariable('FlxG', flixel.FlxG);
+		scriptThing.setVariable('FlxMath', flixel.math.FlxMath);
+		scriptThing.setVariable('FlxSprite', flixel.FlxSprite);
+		scriptThing.setVariable('FNFSprite', FNFSprite);
+		scriptThing.setVariable('FNFCamera', FNFCamera);
+		scriptThing.setVariable('FlxCamera', flixel.FlxCamera);
+		scriptThing.setVariable('FlxTimer', flixel.util.FlxTimer);
+		scriptThing.setVariable('FlxSound', flixel.sound.FlxSound);
+		scriptThing.setVariable('FlxTween', flixel.tweens.FlxTween);
+		scriptThing.setVariable('FlxEase', flixel.tweens.FlxEase);
+		scriptThing.setVariable('FlxColor', flixel.util.FlxColor);
+		scriptThing.setVariable('FlxText', flixel.text.FlxText);
+		scriptThing.setVariable('FlxStringUtil', flixel.util.FlxStringUtil);
+		scriptThing.setVariable('YarnPrefs', ui.PreferencesMenu);
+		scriptThing.setVariable('Controls', Controls);
+		scriptThing.setVariable('Character', Character);
+		scriptThing.setVariable('InputFormatter', InputFormatter);
+		scriptThing.setVariable('Strumline', Strumline);
+		scriptThing.setVariable('Cache', Cache);
+		scriptThing.setVariable('AttachedSprite', AttachedSprite);
+		scriptThing.setVariable('Paths', Paths);
+		scriptThing.setVariable('Note', Note);
+		scriptThing.setVariable('NoteSplash', NoteSplash);
+		scriptThing.setVariable('Alphabet', Alphabet);
+		scriptThing.setVariable('CoolCounter', CoolCounter);
+		scriptThing.setVariable('Conductor', Conductor);
+		scriptThing.setVariable("PlayState", this);
 	}
 
 	function playCutscene(name:String, atEndOfSong:Bool = false, ?callback:Void->Void)
@@ -1162,6 +1245,9 @@ class PlayState extends MusicBeatState
 		}
 
 		startedCountdown = true;
+
+		scriptThing.executeFunc("startCountdown");
+
 		Conductor.songPosition = 0;
 		Conductor.songPosition -= Conductor.crochet * 5;
 
@@ -1256,6 +1342,8 @@ class PlayState extends MusicBeatState
 	function startSong():Void
 	{
 		startingSong = false;
+
+		scriptThing.executeFunc("startSong");
 
 		if (!paused)
 			FlxG.sound.playMusic(Paths.inst(SONG.song), 1, false);
@@ -1397,7 +1485,7 @@ class PlayState extends MusicBeatState
 		return loopState;
 	}
 
-	function sortByTime(Obj1:Note, Obj2:Note)
+	inline function sortByTime(Obj1:Note, Obj2:Note)
 	{
 		return CoolUtil.sortNotes(FlxSort.ASCENDING, Obj1, Obj2);
 	}
@@ -1522,6 +1610,9 @@ class PlayState extends MusicBeatState
 			songScore = 0;
 			combo = 0;
 		}
+
+		scriptThing.executeFunc("update", [elapsed]);
+
 		if (startingSong && startedCountdown && Conductor.songPosition >= 0)
 			startSong();
 
@@ -1664,7 +1755,7 @@ class PlayState extends MusicBeatState
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
 
-		var iconOffset:Int = 26;
+		final iconOffset:Int = 26;
 
 		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
 		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
@@ -1799,8 +1890,13 @@ class PlayState extends MusicBeatState
 
 	override public function destroy()
 	{
+		scriptThing.executeFunc("destroy");
+
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+
+		instance = null;
+
 		super.destroy();
 	}
 
@@ -1849,6 +1945,8 @@ class PlayState extends MusicBeatState
 		else if (totalPlayed < 1)
 			rank = '?';
 
+		scriptThing.executeFunc("recalculateRating");
+
 		scoreTxt.text = 'Score: $songScore $scoreSeparator Hits: $totalPlayed $scoreSeparator Misses: $songMisses $scoreSeparator Accuracy: '
 			+ (rank != '?' ? '$floorAccuracy% [$rank]' : '?');
 	}
@@ -1866,6 +1964,8 @@ class PlayState extends MusicBeatState
 		FlxG.sound.music.stop();
 		vocals.stop();
 		Highscore.saveScore(SONG.song, songScore, storyDifficulty);
+
+		scriptThing.executeFunc("endSong");
 
 		isPixelStage = false; // idk I just have to do this so it doesn't break after playing a week 6 song :shrug:
 
@@ -1963,6 +2063,8 @@ class PlayState extends MusicBeatState
 			if (smallestRating != null && smallestRating.fc != null)
 				fcString = smallestRating.fc;
 		}
+
+		scriptThing.executeFunc("popUpScore", [note]);
 
 		if (!practiceMode)
 		{
@@ -2552,6 +2654,7 @@ class PlayState extends MusicBeatState
 	override function stepHit()
 	{
 		super.stepHit();
+		scriptThing.executeFunc("stepHit", [curStep]);
 		if (Math.abs(FlxG.sound.music.time - (Conductor.songPosition - Conductor.offset)) > 20
 			|| (SONG.needsVoices && Math.abs(vocals.time - (Conductor.songPosition - Conductor.offset)) > 20))
 		{
@@ -2576,6 +2679,8 @@ class PlayState extends MusicBeatState
 	override function beatHit()
 	{
 		super.beatHit();
+
+		scriptThing.executeFunc("beatHit", [curBeat]);
 
 		var section:SwagSection = SONG.notes[Math.floor(curStep / 16)];
 		if (section != null && section.changeBPM)
