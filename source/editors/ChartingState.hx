@@ -184,7 +184,7 @@ class ChartingState extends MusicBeatState
 			\n Ctrl+S - Save chart
 			\nSpace - Stop/Resume song
 			\nR - Reset section\n", 16);
-		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		tipText.setFormat(Paths.font("vcr.ttf"), 12, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		tipText.borderSize = 2;
 		tipText.scrollFactor.set();
 		add(tipText);
@@ -1310,8 +1310,16 @@ class ChartingState extends MusicBeatState
 
 		var note:Note = new Note(daStrumTime, daNoteInfo % 4);
 		if (daNoteInfo > -1)
-		{
+		{	
 			note.sustainLength = daSus;
+			note.setGraphicSize(GRID_SIZE, GRID_SIZE);
+		}
+		else
+		{ // will i actually add an events system, good question i have no idea.
+			note.loadGraphic(Paths.image('eventArrow'));
+			/*note.eventAbility = daSus;
+				note.eventVal1 = i[3];
+				note.eventVal2 = i[4]; */
 			note.setGraphicSize(GRID_SIZE, GRID_SIZE);
 		}
 		note.updateHitbox();

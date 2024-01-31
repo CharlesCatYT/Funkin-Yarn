@@ -75,14 +75,14 @@ class FreeplayState extends MusicBeatState
 			CoolUtil.resetMusic();
 		#end
 
-		addWeek(['Tutorial'], 0, ['gf']);
-		addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], 1, ['dad']);
-		addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky', 'spooky', 'monster']);
-		addWeek(['Pico', 'Philly', 'Blammed'], 3, ['pico']);
-		addWeek(['Satin-Panties', 'High', 'Milf'], 4, ['mom']);
-		addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], 5, ['parents-christmas', 'parents-christmas', 'monster-christmas']);
-		addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
-		addWeek(['Ugh', 'Guns', 'Stress'], 7, ['tankman']);
+		/*addWeek(['Tutorial'], 0, ['gf']);
+			addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], 1, ['dad']);
+			addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky', 'spooky', 'monster']);
+			addWeek(['Pico', 'Philly', 'Blammed'], 3, ['pico']);
+			addWeek(['Satin-Panties', 'High', 'Milf'], 4, ['mom']);
+			addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], 5, ['parents-christmas', 'parents-christmas', 'monster-christmas']);
+			addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
+			addWeek(['Ugh', 'Guns', 'Stress'], 7, ['tankman']); */
 		for (i in 0...initSongList.length)
 		{
 			var songArray:Array<String> = initSongList[i].split(":");
