@@ -909,6 +909,17 @@ class PlayState extends MusicBeatState
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
 
+		// Add Funkin' Yarn watermark
+		var yarnWatermark = new FlxText(FlxG.width * 0.03, FlxG.height * 0.94, 0,
+			SONG.song
+			+ " "
+			+ (storyDifficulty == 2 ? "HARD" : storyDifficulty == 1 ? "NORMAL" : "EASY")
+			+ " - Yarn v"
+			+ MainMenuState.version, 16);
+		yarnWatermark.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		yarnWatermark.scrollFactor.set();
+		add(yarnWatermark);
+
 		botplayTxt = new FlxText(400, 74, FlxG.width - 800, "[BOTPLAY]", 32);
 		botplayTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		botplayTxt.scrollFactor.set();
