@@ -77,6 +77,8 @@ enum KeyboardScheme
  */
 class Controls extends FlxActionSet
 {
+	public static var instance(default, null):Controls;
+
 	var _ui_up = new FlxActionDigital(Action.UI_UP);
 	var _ui_left = new FlxActionDigital(Action.UI_LEFT);
 	var _ui_right = new FlxActionDigital(Action.UI_RIGHT);
@@ -255,6 +257,8 @@ class Controls extends FlxActionSet
 	public function new(name:String, scheme:KeyboardScheme = None)
 	{
 		super(name);
+
+		instance = this;
 
 		add(_ui_up);
 		add(_ui_left);
@@ -606,6 +610,7 @@ class Controls extends FlxActionSet
 
 	override function destroy()
 	{
+		instance = null;
 		super.destroy();
 		FlxG.gamepads.deviceDisconnected.remove(onGamepadDisconnection);
 	}

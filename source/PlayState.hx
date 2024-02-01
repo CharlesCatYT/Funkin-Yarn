@@ -104,31 +104,31 @@ class PlayState extends MusicBeatState
 	public var opponentStrumline:Strumline;
 	public var playerStrumline:Strumline;
 
-	private var camZooming:Bool = false;
-	private var curSong:String = "";
+	public var camZooming:Bool = false;
+	public var curSong:String = "";
 
-	private var health:Float = 1;
-	private var combo:Int = 0;
+	public var health:Float = 1;
+	public var combo:Int = 0;
 
-	private var healthBarBG:FlxSprite;
-	private var healthBar:FlxBar;
+	public var healthBarBG:FlxSprite;
+	public var healthBar:FlxBar;
 
-	private var generatedMusic:Bool = false;
-	private var startingSong:Bool = false;
+	public var generatedMusic:Bool = false;
+	public var startingSong:Bool = false;
 
-	var botplaySine:Float = 0;
-	var botplayTxt:FlxText;
+	public var botplaySine:Float = 0;
+	public var botplayTxt:FlxText;
 
-	private var iconP1:HealthIcon;
-	private var iconP2:HealthIcon;
+	public var iconP1:HealthIcon;
+	public var iconP2:HealthIcon;
 
-	private var camGame:FNFCamera;
-	private var camRating:FlxCamera;
-	private var camHUD:FlxCamera;
-	private var camOther:FlxCamera;
-	private var bumpinCams:Array<FlxCamera> = [];
+	public var camGame:FNFCamera;
+	public var camRating:FlxCamera;
+	public var camHUD:FlxCamera;
+	public var camOther:FlxCamera;
+	public var bumpinCams:Array<FlxCamera> = [];
 
-	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
+	public var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
 
 	var halloweenBG:FlxSprite;
 	var isHalloween:Bool = false;
@@ -156,16 +156,16 @@ class PlayState extends MusicBeatState
 
 	// var gfCutsceneLayer:FlxTypedGroup<FlxAnimate>;
 	// var bfTankCutsceneLayer:FlxTypedGroup<FlxAnimate>;
-	var songScore:Int = 0;
-	var songMisses:Int = 0;
-	var scoreTxt:FlxText;
-	var scoreTxtTween:FlxTween;
+	public var songScore:Int = 0;
+	public var songMisses:Int = 0;
+	public var scoreTxt:FlxText;
+	public var scoreTxtTween:FlxTween;
 
 	var hitMap:Map<String, Int> = new Map<String, Int>();
 
 	public static var campaignScore:Int = 0;
 
-	var defaultCamZoom:Float = 1.05;
+	public var defaultCamZoom:Float = 1.05;
 
 	// how big to stretch the pixel art assets
 	public static final daPixelZoom:Float = 6;
@@ -173,7 +173,7 @@ class PlayState extends MusicBeatState
 	// toggle for old bf
 	public static var isBfOld:Bool = false;
 
-	var inCutscene:Bool = false;
+	public var inCutscene:Bool = false;
 
 	var trackedAssets:Array<FlxBasic> = [];
 
@@ -193,6 +193,8 @@ class PlayState extends MusicBeatState
 	override public function create()
 	{
 		instance = this;
+
+		FlxG.mouse.visible = false;
 
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
@@ -975,41 +977,47 @@ class PlayState extends MusicBeatState
 			canRunScript = false;
 		}
 
-		scriptThing.setVariable("create", function()
+		if (canRunScript)
 		{
-		});
-		scriptThing.setVariable("update", function(elapsed:Float)
-		{
-		});
-		scriptThing.setVariable("beatHit", function(curBeat:Int)
-		{
-		});
-		scriptThing.setVariable("stepHit", function(curStep:Int)
-		{
-		});
-		scriptThing.setVariable("startCountdown", function()
-		{
-		});
-		scriptThing.setVariable("startSong", function()
-		{
-		});
-		scriptThing.setVariable("destroy", function()
-		{
-		});
-		scriptThing.setVariable("recalculateRating", function()
-		{
-		});
-		scriptThing.setVariable("endSong", function()
-		{
-		});
-		scriptThing.setVariable("popUpScore", function()
-		{
-		});
+			scriptThing.setVariable("create", function()
+			{
+			});
+			scriptThing.setVariable("update", function(elapsed:Float)
+			{
+			});
+			scriptThing.setVariable("beatHit", function(curBeat:Int)
+			{
+			});
+			scriptThing.setVariable("stepHit", function(curStep:Int)
+			{
+			});
+			scriptThing.setVariable("startCountdown", function()
+			{
+			});
+			scriptThing.setVariable("startSong", function()
+			{
+			});
+			scriptThing.setVariable("destroy", function()
+			{
+			});
+			scriptThing.setVariable("recalculateRating", function()
+			{
+			});
+			scriptThing.setVariable("endSong", function()
+			{
+			});
+			scriptThing.setVariable("popUpScore", function(note:Note)
+			{
+			});
+			scriptThing.setVariable("goodNoteHit", function(strumline:Strumline, note:Note)
+			{
+			});
 
-		initScript();
-		scriptThing.loadFile();
+			scriptThing.setDefaultVars();
+			scriptThing.loadFile();
 
-		scriptThing.executeFunc("create");
+			scriptThing.executeFunc("create");
+		}
 
 		startingSong = true;
 
@@ -1077,37 +1085,6 @@ class PlayState extends MusicBeatState
 		super.create();
 
 		Cache.clearUnused();
-	}
-
-	function initScript()
-	{
-		scriptThing.setVariable('FlxG', flixel.FlxG);
-		scriptThing.setVariable('FlxMath', flixel.math.FlxMath);
-		scriptThing.setVariable('FlxSprite', flixel.FlxSprite);
-		scriptThing.setVariable('FNFSprite', FNFSprite);
-		scriptThing.setVariable('FNFCamera', FNFCamera);
-		scriptThing.setVariable('FlxCamera', flixel.FlxCamera);
-		scriptThing.setVariable('FlxTimer', flixel.util.FlxTimer);
-		scriptThing.setVariable('FlxSound', flixel.sound.FlxSound);
-		scriptThing.setVariable('FlxTween', flixel.tweens.FlxTween);
-		scriptThing.setVariable('FlxEase', flixel.tweens.FlxEase);
-		// scriptThing.setVariable('FlxColor', flixel.util.FlxColor);
-		scriptThing.setVariable('FlxText', flixel.text.FlxText);
-		scriptThing.setVariable('FlxStringUtil', flixel.util.FlxStringUtil);
-		scriptThing.setVariable('YarnPrefs', ui.PreferencesMenu);
-		scriptThing.setVariable('Controls', Controls);
-		scriptThing.setVariable('Character', Character);
-		scriptThing.setVariable('InputFormatter', InputFormatter);
-		scriptThing.setVariable('Strumline', Strumline);
-		scriptThing.setVariable('Cache', Cache);
-		scriptThing.setVariable('AttachedSprite', AttachedSprite);
-		scriptThing.setVariable('Paths', Paths);
-		scriptThing.setVariable('Note', Note);
-		scriptThing.setVariable('NoteSplash', NoteSplash);
-		scriptThing.setVariable('Alphabet', Alphabet);
-		scriptThing.setVariable('CoolCounter', CoolCounter);
-		scriptThing.setVariable('Conductor', Conductor);
-		scriptThing.setVariable("PlayState", this);
 	}
 
 	function playCutscene(name:String, atEndOfSong:Bool = false, ?callback:Void->Void)
@@ -1250,7 +1227,8 @@ class PlayState extends MusicBeatState
 
 		startedCountdown = true;
 
-		scriptThing.executeFunc("startCountdown");
+		if (canRunScript)
+			scriptThing.executeFunc("startCountdown");
 
 		Conductor.songPosition = 0;
 		Conductor.songPosition -= Conductor.crochet * 5;
@@ -1347,7 +1325,8 @@ class PlayState extends MusicBeatState
 	{
 		startingSong = false;
 
-		scriptThing.executeFunc("startSong");
+		if (canRunScript)
+			scriptThing.executeFunc("startSong");
 
 		if (!paused)
 			FlxG.sound.playMusic(Paths.inst(SONG.song), 1, false);
@@ -1615,7 +1594,8 @@ class PlayState extends MusicBeatState
 			combo = 0;
 		}
 
-		scriptThing.executeFunc("update", [elapsed]);
+		if (canRunScript)
+			scriptThing.executeFunc("update", [elapsed]);
 
 		if (startingSong && startedCountdown && Conductor.songPosition >= 0)
 			startSong();
@@ -1894,7 +1874,8 @@ class PlayState extends MusicBeatState
 
 	override public function destroy()
 	{
-		scriptThing.executeFunc("destroy");
+		if (canRunScript)
+			scriptThing.executeFunc("destroy");
 
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
@@ -1949,7 +1930,8 @@ class PlayState extends MusicBeatState
 		else if (totalPlayed < 1)
 			rank = '?';
 
-		scriptThing.executeFunc("recalculateRating");
+		if (canRunScript)
+			scriptThing.executeFunc("recalculateRating");
 
 		scoreTxt.text = 'Score: $songScore $scoreSeparator Hits: $totalPlayed $scoreSeparator Misses: $songMisses $scoreSeparator Accuracy: '
 			+ (rank != '?' ? '$floorAccuracy% [$rank]' : '?');
@@ -1969,7 +1951,8 @@ class PlayState extends MusicBeatState
 		vocals.stop();
 		Highscore.saveScore(SONG.song, songScore, storyDifficulty);
 
-		scriptThing.executeFunc("endSong");
+		if (canRunScript)
+			scriptThing.executeFunc("endSong");
 
 		isPixelStage = false; // idk I just have to do this so it doesn't break after playing a week 6 song :shrug:
 
@@ -2068,7 +2051,8 @@ class PlayState extends MusicBeatState
 				fcString = smallestRating.fc;
 		}
 
-		scriptThing.executeFunc("popUpScore", [note]);
+		if (canRunScript)
+			scriptThing.executeFunc("popUpScore", [note]);
 
 		if (!practiceMode)
 		{
@@ -2475,6 +2459,9 @@ class PlayState extends MusicBeatState
 
 	function goodNoteHit(strumline:Strumline, note:Note):Void
 	{
+		if (canRunScript)
+			scriptThing.executeFunc("goodNoteHit", [strumline, note]);
+
 		if (!note.wasGoodHit)
 		{
 			note.wasGoodHit = true;
@@ -2658,7 +2645,10 @@ class PlayState extends MusicBeatState
 	override function stepHit()
 	{
 		super.stepHit();
-		scriptThing.executeFunc("stepHit", [curStep]);
+
+		if (canRunScript)
+			scriptThing.executeFunc("stepHit", [curStep]);
+
 		if (Math.abs(FlxG.sound.music.time - (Conductor.songPosition - Conductor.offset)) > 20
 			|| (SONG.needsVoices && Math.abs(vocals.time - (Conductor.songPosition - Conductor.offset)) > 20))
 		{
@@ -2684,7 +2674,8 @@ class PlayState extends MusicBeatState
 	{
 		super.beatHit();
 
-		scriptThing.executeFunc("beatHit", [curBeat]);
+		if (canRunScript)
+			scriptThing.executeFunc("beatHit", [curBeat]);
 
 		var section:SwagSection = SONG.notes[Math.floor(curStep / 16)];
 		if (section != null && section.changeBPM)

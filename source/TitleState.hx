@@ -112,7 +112,7 @@ class TitleState extends MusicBeatState
 		engineLogo.antialiasing = PreferencesMenu.getPref('antialiasing');
 		add(engineLogo);
 
-		FlxG.mouse.visible = false;
+		FlxG.mouse.visible = true;
 
 		if (initialized)
 			skipIntro();
@@ -148,23 +148,26 @@ class TitleState extends MusicBeatState
 
 		var accept = controls.ACCEPT;
 
-		if (accept && !transitioning && skippedIntro)
+		if (!transitioning && skippedIntro)
 		{
-			if (titleText != null)
-				titleText.animation.play('press');
-
-			FlxG.camera.flash(FlxColor.WHITE, 1);
-			FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
-
-			transitioning = true;
-			// FlxG.sound.music.stop();
-
-			new FlxTimer().start(2, function(twn:FlxTimer)
+			if (accept || FlxG.mouse.justPressed)
 			{
-				Main.switchState(new MainMenuState());
-			});
+				if (titleText != null)
+					titleText.animation.play('press');
 
-			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
+				FlxG.camera.flash(FlxColor.WHITE, 1);
+				FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
+
+				transitioning = true;
+				// FlxG.sound.music.stop();
+
+				new FlxTimer().start(2, function(twn:FlxTimer)
+				{
+					Main.switchState(new MainMenuState());
+				});
+
+				// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
+			}
 		}
 
 		if (accept && !skippedIntro && initialized)

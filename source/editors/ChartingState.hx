@@ -28,6 +28,8 @@ using StringTools;
 
 class ChartingState extends MusicBeatState
 {
+	public static var instance(default, null):ChartingState;
+
 	var UI_box:FlxUITabMenu;
 
 	/**
@@ -39,10 +41,11 @@ class ChartingState extends MusicBeatState
 	static var lastSection:Int = 0;
 	private static var lastSong:String = '';
 
-	var bpmTxt:FlxText;
+	public static var bpmTxt:FlxText;
 
-	var strumLine:FlxSprite;
-	var curSong:String = 'Dadbattle';
+	public static var strumLine:FlxSprite;
+	public static var curSong:String = 'Dadbattle';
+
 	var amountSteps:Int = 0;
 	var bullshitUI:FlxGroup;
 	var writingNotesText:FlxText;
@@ -50,8 +53,8 @@ class ChartingState extends MusicBeatState
 
 	public static var GRID_SIZE:Int = 40;
 
-	var gridMult:Int = 2;
-	var curZoom:Float = 1;
+	public static var gridMult:Int = 2;
+	public static var curZoom:Float = 1;
 
 	private var blockPressWhileTypingOn:Array<FlxUIInputText> = [];
 	private var blockPressWhileScrolling:Array<FlxUIDropDownMenuCustom> = [];
@@ -66,7 +69,7 @@ class ChartingState extends MusicBeatState
 
 	var gridBG:FlxSprite;
 
-	var _song:SwagSong;
+	public static var _song:SwagSong;
 
 	var UI_songTitle:FlxUIInputText;
 	/*
@@ -78,20 +81,25 @@ class ChartingState extends MusicBeatState
 
 	var tempBpm:Float = 0;
 
-	var vocals:FlxSound;
+	public static var vocals:FlxSound;
 
-	var leftIcon:HealthIcon;
-	var rightIcon:HealthIcon;
-	var currentSongName:String;
-	var zoomMult:Int = 1; // 0 = 0.5 actually lmao
-	var zoomTxt:FlxText;
+	public static var leftIcon:HealthIcon;
+	public static var rightIcon:HealthIcon;
+	public static var currentSongName:String;
+	public static var zoomMult:Int = 1; // 0 = 0.5 actually lmao
+	public static var zoomTxt:FlxText;
 
 	var waveformSprite:FlxSprite;
-	var gridLayer:FlxTypedGroup<FlxSprite>;
+
+	public static var gridLayer:FlxTypedGroup<FlxSprite>;
 
 	override function create()
 	{
+		instance = this;
+
 		curSection = lastSection;
+
+		FlxG.mouse.visible = true;
 
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.scrollFactor.set();
@@ -144,8 +152,6 @@ class ChartingState extends MusicBeatState
 		/*if (_song.stage == null)
 			_song.stage = PlayState.curStage; */
 
-		FlxG.mouse.visible = true;
-
 		tempBpm = _song.bpm;
 
 		addSection();
@@ -158,9 +164,11 @@ class ChartingState extends MusicBeatState
 		Conductor.changeBPM(_song.bpm);
 		Conductor.mapBPMChanges(_song);
 
-		bpmTxt = new FlxText(900, 50, 0, "", 16);
+		var whatUh:Int = 1045;
+		bpmTxt = new FlxText(whatUh, 50, 0, "", 16);
 		bpmTxt.scrollFactor.set();
 		add(bpmTxt);
+		trace('bpmtxt x pos on' + whatUh);
 
 		strumLine = new FlxSprite(0, 50).makeGraphic(Std.int(FlxG.width / 2), 4);
 		add(strumLine);
@@ -867,7 +875,6 @@ class ChartingState extends MusicBeatState
 
 			if (FlxG.keys.justPressed.ENTER)
 			{
-				FlxG.mouse.visible = false;
 				PlayState.SONG = _song;
 				FlxG.sound.music.stop();
 				if (vocals != null)
@@ -1671,5 +1678,11 @@ class ChartingState extends MusicBeatState
 		CoolUtil.openSavePrompt(Json.stringify({
 			"song": _song
 		}, '\t'), _song.song.toLowerCase() + ".json");
+	}
+
+	override public function destroy()
+	{
+		instance = null;
+		super.destroy();
 	}
 }

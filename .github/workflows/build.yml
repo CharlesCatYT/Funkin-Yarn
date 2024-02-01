@@ -30,7 +30,7 @@ jobs:
           haxelib install flixel-ui --quiet
           haxelib install flixel-addons --quiet
           haxelib install flxanimate --quiet
-          haxelib install hscript --quiet
+          haxelib git hscript-improved https://github.com/Erizur/hscript-improved
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
       - name: Compile
         run: haxelib run lime build linux
@@ -61,7 +61,7 @@ jobs:
           haxelib install flixel-addons --quiet
           haxelib install flxanimate --quiet
           haxelib install hxCodec --quiet
-          haxelib install hscript --quiet
+          haxelib git hscript-improved https://github.com/Erizur/hscript-improved
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
         shell: cmd
       - name: Compile
@@ -92,7 +92,7 @@ jobs:
           haxelib install flixel-ui --quiet
           haxelib install flixel-addons --quiet
           haxelib install flxanimate --quiet
-          haxelib install hscript --quiet
+          haxelib git hscript-improved https://github.com/Erizur/hscript-improved
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
       - name: Compile
         run: haxelib run lime build mac
@@ -123,6 +123,7 @@ jobs:
           haxelib install flixel-addons --quiet
           haxelib install flxanimate --quiet
           haxelib install hxCodec --quiet
+          haxelib git hscript-improved https://github.com/Erizur/hscript-improved
       - name: Compile
         run: haxelib run lime build html5
       - name: Deploy

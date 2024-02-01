@@ -41,6 +41,8 @@ class MainMenuState extends MusicBeatState
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
+		FlxG.mouse.visible = false;
+		
 		if (FlxG.sound.music == null || !FlxG.sound.music.playing)
 			CoolUtil.resetMusic();
 
