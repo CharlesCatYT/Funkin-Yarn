@@ -1699,7 +1699,7 @@ class PlayState extends MusicBeatState
 				persistentUpdate = false;
 				persistentDraw = true;
 
-				Main.switchState(new GitarooPause());
+				FlxG.switchState(() -> new GitarooPause());
 			}
 			else
 			{
@@ -1729,7 +1729,7 @@ class PlayState extends MusicBeatState
 			persistentUpdate = false;
 			persistentDraw = true;
 
-			Main.switchState(new editors.ChartingState());
+			FlxG.switchState(() -> new editors.ChartingState());
 
 			#if discord_rpc
 			DiscordClient.changePresence("Chart Editor", null, null, true);
@@ -1741,7 +1741,7 @@ class PlayState extends MusicBeatState
 			persistentUpdate = false;
 			persistentDraw = true;
 
-			Main.switchState(new editors.CharacterEditorState());
+			FlxG.switchState(() -> new editors.CharacterEditorState());
 
 			#if discord_rpc
 			DiscordClient.changePresence("Character Editor", null, null, true);
@@ -1817,7 +1817,7 @@ class PlayState extends MusicBeatState
 					gf.danceSpeed = 1;
 					// case 163:
 					// FlxG.sound.music.stop();
-					// Main.switchState(new TitleState());
+					// FlxG.switchState(() -> new TitleState());
 			}
 		}
 
@@ -1828,7 +1828,7 @@ class PlayState extends MusicBeatState
 				case 128, 129, 130:
 					vocals.volume = 0;
 					// FlxG.sound.music.stop();
-					// Main.switchState(new PlayState());
+					// FlxG.switchState(() -> new PlayState());
 			}
 		}
 		// better streaming of shit
@@ -1864,7 +1864,7 @@ class PlayState extends MusicBeatState
 
 				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
-				// Main.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+				// FlxG.switchState(() -> new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
 				#if discord_rpc
 				// Game Over doesn't get his own variable because it's only used here
@@ -1908,55 +1908,7 @@ class PlayState extends MusicBeatState
 			if(eventNotes[0][4] != null)
 				value2 = eventNotes[0][4];
 
-			switch(eventNotes[0][2]) {
-				case 'Hey!':
-					var value:Int = Std.parseInt(value1);
-					var time:Float = Std.parseFloat(value2);
-					if(Math.isNaN(time) || time <= 0) time = 0.6;
-
-					if(value != 0) {
-						if(dad.curCharacter == 'gf') { // tutorial gf is actually dad! gotcha!
-							dad.playAnim('cheer', true);
-							dad.specialAnim = true;
-							dad.heyTimer = time;
-						} else {
-							gf.playAnim('cheer', true);
-							gf.specialAnim = true;
-							gf.heyTimer = time;
-						}
-
-						if(curStage == 'mall') {
-							bottomBoppers.animation.play('hey', true);
-							heyTimer = time;
-						}
-					}
-					if(value != 1) {
-						boyfriend.playAnim('hey', true);
-						boyfriend.specialAnim = true;
-						boyfriend.heyTimer = time;
-					}
-
-				case 'Set GF Speed':
-					var value:Int = Std.parseInt(value1);
-					if(Math.isNaN(value)) value = 1;
-					gfSpeed = value;
-
-				case 'Add Camera Bump':
-					if(ClientPrefs.camZooms && FlxG.camera.zoom < 1.35) {
-						var camZoom:Float = Std.parseFloat(value1);
-						var hudZoom:Float = Std.parseFloat(value2);
-						if(Math.isNaN(camZoom)) camZoom = 0.015;
-						if(Math.isNaN(hudZoom)) hudZoom = 0.03;
-
-						FlxG.camera.zoom += camZoom;
-						camHUD.zoom += hudZoom;
-					}
-
-				case 'Play Animation':
-					trace('Anim to play: ' + value1);
-					dad.playAnim(value1, true);
-					dad.specialAnim = true;
-			}
+			triggerEventNote(eventNotes[0][2], value1, value2);
 			eventNotes.shift();
 		}
 
@@ -1968,6 +1920,89 @@ class PlayState extends MusicBeatState
 		if (FlxG.keys.justPressed.ONE)
 			endSong();
 		#end
+	}
+
+	function triggerEventNote(eventName:String, value1:String, value2:String) {
+		switch(eventName) {
+			case 'Hey!':
+				var value:Int = Std.parseInt(value1);
+				var time:Float = Std.parseFloat(value2);
+				if(Math.isNaN(time) || time <= 0) time = 0.6;
+
+				if(value != 0) {
+					if(dad.curCharacter == 'gf') {
+						dad.playAnim('cheer', true);
+						dad.specialAnim = true;
+						dad.heyTimer = time;
+					} else {
+						gf.playAnim('cheer', true);
+						gf.specialAnim = true;
+						gf.heyTimer = time;
+					}
+
+					if(curStage == 'mall') {
+						bottomBoppers.animation.play('hey', true);
+						heyTimer = time;
+					}
+				}
+				if(value != 1) {
+					boyfriend.playAnim('hey', true);
+					boyfriend.specialAnim = true;
+					boyfriend.heyTimer = time;
+				}
+
+			case 'Set GF Speed':
+				var value:Int = Std.parseInt(value1);
+				if(Math.isNaN(value)) value = 1;
+				gfSpeed = value;
+
+			case 'Add Camera Zoom':
+				if(ClientPrefs.camZooms && FlxG.camera.zoom < 1.35) {
+					var camZoom:Float = Std.parseFloat(value1);
+					var hudZoom:Float = Std.parseFloat(value2);
+					if(Math.isNaN(camZoom)) camZoom = 0.015;
+					if(Math.isNaN(hudZoom)) hudZoom = 0.03;
+
+					FlxG.camera.zoom += camZoom;
+					camHUD.zoom += hudZoom;
+				}
+
+			case 'Play Animation':
+				trace('Anim to play: ' + value1);
+				var val2:Int = Std.parseInt(value2);
+				if(Math.isNaN(val2)) val2 = 0;
+
+				var char:Character = dad;
+				switch(val2) {
+					case 1: char = boyfriend;
+					case 2: char = gf;
+				}
+				char.playAnim(value1, true);
+				char.specialAnim = true;
+
+			case 'Camera Follow Pos':
+				var val1:Float = Std.parseFloat(value1);
+				var val2:Float = Std.parseFloat(value2);
+				if(Math.isNaN(val1)) val1 = 0;
+				if(Math.isNaN(val2)) val2 = 0;
+
+				isCameraOnForcedPos = false;
+				if(!Math.isNaN(Std.parseFloat(value1)) || !Math.isNaN(Std.parseFloat(value2))) {
+					camGame.camFollow.x = val1;
+					camGame.camFollow.y = val2;
+					isCameraOnForcedPos = true;
+				}
+				var val:Int = Std.parseInt(value1);
+				if(Math.isNaN(val)) val = 0;
+
+				if(val > 0) {
+					idleAltSuffix = '-alt';
+					if(value2 != null && value2.length > 0)
+						idleAltSuffix = value2;
+				} else {
+					idleAltSuffix = '';
+				}
+		}
 	}
 
 	override public function destroy()
@@ -2064,7 +2099,7 @@ class PlayState extends MusicBeatState
 			{
 				unloadAssets();
 
-				Main.switchState(new StoryMenuState());
+				FlxG.switchState(() -> new StoryMenuState());
 
 				CoolUtil.resetMusic();
 
@@ -2101,7 +2136,7 @@ class PlayState extends MusicBeatState
 					FlxG.sound.play(Paths.sound('Lights_Shut_off'), 1, false, null, true, function()
 					{
 						SONG = Song.loadFromJson(storyPlaylist[0].toLowerCase() + difficulty, storyPlaylist[0]);
-						LoadingState.loadAndSwitchState(new PlayState());
+						LoadingState.loadAndSwitchState(() -> new PlayState());
 					});
 				}
 				else
@@ -2112,7 +2147,7 @@ class PlayState extends MusicBeatState
 					unloadAssets();
 
 					SONG = Song.loadFromJson(storyPlaylist[0].toLowerCase() + difficulty, storyPlaylist[0]);
-					LoadingState.loadAndSwitchState(new PlayState());
+					LoadingState.loadAndSwitchState(() -> new PlayState());
 				}
 			}
 		}
@@ -2120,7 +2155,7 @@ class PlayState extends MusicBeatState
 		{
 			unloadAssets();
 
-			Main.switchState(new FreeplayState());
+			FlxG.switchState(() -> new FreeplayState());
 			#if NO_PRELOAD_ALL
 			CoolUtil.resetMusic();
 			#end

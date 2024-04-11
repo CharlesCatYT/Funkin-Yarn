@@ -30,26 +30,16 @@ class ChartingState extends MusicBeatState
 {
 	public static var instance(default, null):ChartingState;
 
-	var noteTypeList:Array<String> =
-	[
-		'',
-		'Alt Animation',
-		'Hey!',
-		'No Animation',
-		'GF Sing',
-		'Shake Note'
-	];
-
-	var psychicEvents:Array<Dynamic> =
-	[
+	var yarnEvents:Array<Dynamic> = [
 		['', "Nothing. Yep, that's right."],
 		['Hey!', "Plays the \"Hey!\" animation from Bopeebo,\nValue 1: 0 = Only BF, 1 = Only GF,\nSomething else = Both.\nValue 2: Custom animation duration,\nleave it blank for 0.6s"],
 		['Set GF Speed', "Sets GF head bopping speed,\nValue 1: 1 = Normal speed, 2 = Half speed.\nOther values weren't tested though\nUsed on Fresh during the beatbox parts.\nWarning: Value must not have decimals!"],
-		['Add Camera Bump', "Used on MILF on that one \"hard\" part\nValue 1: Camera zoom add (Default: 0.015)\nValue 2: UI zoom add (Default: 0.03)\nLeave the values blank if you want to use Default."],
+		['Add Camera Zoom', "Used on MILF on that one \"hard\" part\nValue 1: Camera zoom add (Default: 0.015)\nValue 2: UI zoom add (Default: 0.03)\nLeave the values blank if you want to use Default."],
 		['Flash Camera', "Flashes the camera,\nValue 1: Speed"],
 		['HUD Opacity', "Changes the HUD's opacity,\nValue 1: Opacity\nValue 2: Speed"],
 		['Show Image', "I don't know, show an image?\nValue 1: Image path\nValue 2: Speed"],
-		['Play Animation', "Plays an animation for the opponent,\nonce the animation is completed,\nthe animation changes back to Idle\n\nValue 1: Animation to play."]
+		['Play Animation', "Plays an animation on a Character,\nonce the animation is completed,\nthe animation changes to Idle\n\nValue 1: Animation to play.\nValue 2: Character (0 = Dad, 1 = BF, 2 = GF)"],
+		['Camera Follow Pos', "Value 1: X\nValue 2: Y\n\nThe camera won't change the follow point\nafter using this, for getting it back\nto normal, leave both values blank."],
 	];
 
 
@@ -229,7 +219,7 @@ class ChartingState extends MusicBeatState
 		addSongUI();
 		addSectionUI();
 		addNoteUI();
-		addPsychicUI();
+		addYarnUI();
 		addChartingUI();
 		updateHeads();
 		updateWaveform();
@@ -283,19 +273,19 @@ class ChartingState extends MusicBeatState
 		var loadAutosaveBtn:FlxButton = new FlxButton(reloadSongJson.x, reloadSongJson.y + 30, "Load Autosave", loadAutosave);
 
 		var loadEventJson:FlxButton = new FlxButton(loadAutosaveBtn.x, loadAutosaveBtn.y + 30, 'Load Events', function()
+		{
+			var songName:String = _song.song.toLowerCase();
+			var file:String = Paths.json(songName + '/events');
+			#if sys
+			if (sys.FileSystem.exists(file))
+			#else
+			if (OpenFlAssets.exists(file))
+			#end
 			{
-				var songName:String = _song.song.toLowerCase();
-				var file:String = Paths.json(songName + '/events');
-				#if sys
-				if (sys.FileSystem.exists(file))
-				#else
-				if (OpenFlAssets.exists(file))
-				#end
-				{
-					PlayState.SONG = Song.loadFromJson('events', songName);
-					FlxG.resetState();
-				}
-			});
+				PlayState.SONG = Song.loadFromJson('events', songName);
+				FlxG.resetState();
+			}
+		});
 
 		var clear_notes:FlxButton = new FlxButton(320, 310, 'Clear all notes', function()
 		{
@@ -579,25 +569,25 @@ class ChartingState extends MusicBeatState
 		UI_box.addGroup(tab_group_note);
 	}
 
-	function addPsychicUI():Void
+	function addYarnUI():Void
 	{
 		var tab_group_event = new FlxUI(null, UI_box);
 		tab_group_event.name = 'Events';
 
-		var descText:FlxText = new FlxText(20, 200, 0, psychicEvents[0][0]);
+		var descText:FlxText = new FlxText(20, 200, 0, yarnEvents[0][0]);
 
 		var leEvents:Array<String> = [];
-		for (i in 0...psychicEvents.length) {
-			leEvents.push(psychicEvents[i][0]);
+		for (i in 0...yarnEvents.length) {
+			leEvents.push(yarnEvents[i][0]);
 		}
 
 		var text:FlxText = new FlxText(20, 30, 0, "Event:");
 		tab_group_event.add(text);
-		var eventDropDown = new FlxUIDropDownMenu(20, 50, FlxUIDropDownMenu.makeStrIdLabelArray(leEvents, true), function(pressed:String) {
-			selectedPsychic = Std.parseInt(pressed);
-			descText.text = psychicEvents[selectedPsychic][1];
+		var eventDropDown = new FlxUIDropDownMenuCustom(20, 50, FlxUIDropDownMenuCustom.makeStrIdLabelArray(leEvents, true), function(pressed:String) {
+			selectedYarn = Std.parseInt(pressed);
+			descText.text = yarnEvents[selectedYarn][1];
 			if(curSelectedNote != null) {
-				curSelectedNote[2] = psychicEvents[selectedPsychic][0];
+				curSelectedNote[2] = yarnEvents[selectedYarn][0];
 			}
 		});
 
@@ -979,7 +969,7 @@ class ChartingState extends MusicBeatState
 				FlxG.sound.music.stop();
 				if (vocals != null)
 					vocals.stop();
-				LoadingState.loadAndSwitchState(new PlayState());
+				LoadingState.loadAndSwitchState(() -> new PlayState());
 			}
 
 			if (curSelectedNote != null && curSelectedNote[1] > -1)
@@ -1567,9 +1557,9 @@ class ChartingState extends MusicBeatState
 			note.setGraphicSize(GRID_SIZE, GRID_SIZE);
 		} else { // event note
 			note.loadGraphic(Paths.image('eventArrow'));
-			note.psychicAbility = daSus;
-			note.psychicVal1 = i[3];
-			note.psychicVal2 = i[4];
+			note.yarnAbility = daSus;
+			note.yarnVal1 = i[3];
+			note.yarnVal2 = i[4];
 			note.setGraphicSize(GRID_SIZE, GRID_SIZE);
 		}
 		note.updateHitbox();
@@ -1686,7 +1676,7 @@ class ChartingState extends MusicBeatState
 
 		if(noteData > -1) _song.notes[curSection].sectionNotes.push([noteStrum, noteData, noteSus, daType]);
 		else {
-			var psych = psychicEvents[selectedPsychic][0];
+			var psych = yarnEvents[selectedYarn][0];
 			var text1 = value1InputText.text;
 			var text2 = value2InputText.text;
 			_song.notes[curSection].sectionNotes.push([noteStrum, noteData, psych, text1, text2]);
@@ -1753,13 +1743,13 @@ class ChartingState extends MusicBeatState
 	function loadJson(song:String):Void
 	{
 		PlayState.SONG = Song.loadFromJson(song.toLowerCase(), song.toLowerCase());
-		Main.resetState();
+		FlxG.resetState();
 	}
 
 	function loadAutosave():Void
 	{
 		PlayState.SONG = Song.parseJSONshit(FlxG.save.data.autosave);
-		Main.resetState();
+		FlxG.resetState();
 	}
 
 	function autosaveSong():Void

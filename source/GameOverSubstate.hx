@@ -93,9 +93,9 @@ class GameOverSubstate extends MusicBeatSubstate
 			remove(bf);
 
 			if (PlayState.isStoryMode)
-				Main.switchState(new StoryMenuState());
+				FlxG.switchState(() -> new StoryMenuState());
 			else
-				Main.switchState(new FreeplayState());
+				FlxG.switchState(() -> new FreeplayState());
 		}
 
 		if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.curFrame == 12)
@@ -151,7 +151,7 @@ class GameOverSubstate extends MusicBeatSubstate
 			{
 				camGame.fade(FlxColor.BLACK, 2, false, function()
 				{
-					LoadingState.loadAndSwitchState(new PlayState());
+					LoadingState.loadAndSwitchState(() -> new PlayState());
 				});
 			});
 		}
