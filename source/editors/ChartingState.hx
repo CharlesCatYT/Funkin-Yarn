@@ -30,6 +30,29 @@ class ChartingState extends MusicBeatState
 {
 	public static var instance(default, null):ChartingState;
 
+	var noteTypeList:Array<String> =
+	[
+		'',
+		'Alt Animation',
+		'Hey!',
+		'No Animation',
+		'GF Sing',
+		'Shake Note'
+	];
+
+	var psychicEvents:Array<Dynamic> =
+	[
+		['', "Nothing. Yep, that's right."],
+		['Hey!', "Plays the \"Hey!\" animation from Bopeebo,\nValue 1: 0 = Only BF, 1 = Only GF,\nSomething else = Both.\nValue 2: Custom animation duration,\nleave it blank for 0.6s"],
+		['Set GF Speed', "Sets GF head bopping speed,\nValue 1: 1 = Normal speed, 2 = Half speed.\nOther values weren't tested though\nUsed on Fresh during the beatbox parts.\nWarning: Value must not have decimals!"],
+		['Add Camera Bump', "Used on MILF on that one \"hard\" part\nValue 1: Camera zoom add (Default: 0.015)\nValue 2: UI zoom add (Default: 0.03)\nLeave the values blank if you want to use Default."],
+		['Flash Camera', "Flashes the camera,\nValue 1: Speed"],
+		['HUD Opacity', "Changes the HUD's opacity,\nValue 1: Opacity\nValue 2: Speed"],
+		['Show Image', "I don't know, show an image?\nValue 1: Image path\nValue 2: Speed"],
+		['Play Animation', "Plays an animation for the opponent,\nonce the animation is completed,\nthe animation changes back to Idle\n\nValue 1: Animation to play."]
+	];
+
+
 	var UI_box:FlxUITabMenu;
 
 	/**
@@ -177,7 +200,7 @@ class ChartingState extends MusicBeatState
 		dummyArrow = new FlxSprite().makeGraphic(GRID_SIZE, GRID_SIZE);
 		add(dummyArrow);
 
-		UI_box = new FlxUITabMenu(null, null, CoolUtil.makeUITabs(['Song', 'Charting', 'Section', 'Note']), null, true);
+		UI_box = new FlxUITabMenu(null, null, CoolUtil.makeUITabs(['Song', 'Charting', 'Section', 'Events', 'Note']), null, true);
 
 		UI_box.scrollFactor.set();
 		UI_box.resize(300, 400);
@@ -206,6 +229,7 @@ class ChartingState extends MusicBeatState
 		addSongUI();
 		addSectionUI();
 		addNoteUI();
+		addPsychicUI();
 		addChartingUI();
 		updateHeads();
 		updateWaveform();
@@ -258,6 +282,21 @@ class ChartingState extends MusicBeatState
 
 		var loadAutosaveBtn:FlxButton = new FlxButton(reloadSongJson.x, reloadSongJson.y + 30, "Load Autosave", loadAutosave);
 
+		var loadEventJson:FlxButton = new FlxButton(loadAutosaveBtn.x, loadAutosaveBtn.y + 30, 'Load Events', function()
+			{
+				var songName:String = _song.song.toLowerCase();
+				var file:String = Paths.json(songName + '/events');
+				#if sys
+				if (sys.FileSystem.exists(file))
+				#else
+				if (OpenFlAssets.exists(file))
+				#end
+				{
+					PlayState.SONG = Song.loadFromJson('events', songName);
+					FlxG.resetState();
+				}
+			});
+
 		var clear_notes:FlxButton = new FlxButton(320, 310, 'Clear all notes', function()
 		{
 			for (sec in 0..._song.notes.length)
@@ -267,6 +306,27 @@ class ChartingState extends MusicBeatState
 				{
 					var note:Array<Dynamic> = _song.notes[sec].sectionNotes[count];
 					if (note != null && note[1] > -1)
+					{
+						_song.notes[sec].sectionNotes.remove(note);
+					}
+					else
+					{
+						count++;
+					}
+				}
+			}
+			updateGrid();
+		});
+
+		var clear_events:FlxButton = new FlxButton(loadAutosaveBtn.x, 320, 'Clear all events', function()
+		{
+			for (sec in 0..._song.notes.length)
+			{
+				var count:Int = 0;
+				while (count < _song.notes[sec].sectionNotes.length)
+				{
+					var note:Array<Dynamic> = _song.notes[sec].sectionNotes[count];
+					if (note != null && note[1] < 0)
 					{
 						_song.notes[sec].sectionNotes.remove(note);
 					}
@@ -347,11 +407,13 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(new FlxText(150, player2DropDown.y - 15, 0, 'Opponent:'));
 		tab_group_song.add(restartButton);
 		// tab_group_song.add(new FlxText(150, stageDropDown.y - 15, 0, 'Stage:'));
+		tab_group_song.add(clear_events);
 		tab_group_song.add(saveButton);
 		tab_group_song.add(reloadSong);
 		tab_group_song.add(reloadSongJson);
 		tab_group_song.add(clear_notes);
 		tab_group_song.add(loadAutosaveBtn);
+		tab_group_song.add(loadEventJson);
 		tab_group_song.add(stepperBPM);
 		tab_group_song.add(stepperSpeed);
 		tab_group_song.add(player2DropDown);
@@ -515,6 +577,44 @@ class ChartingState extends MusicBeatState
 		tab_group_note.add(writingNotesText);
 
 		UI_box.addGroup(tab_group_note);
+	}
+
+	function addPsychicUI():Void
+	{
+		var tab_group_event = new FlxUI(null, UI_box);
+		tab_group_event.name = 'Events';
+
+		var descText:FlxText = new FlxText(20, 200, 0, psychicEvents[0][0]);
+
+		var leEvents:Array<String> = [];
+		for (i in 0...psychicEvents.length) {
+			leEvents.push(psychicEvents[i][0]);
+		}
+
+		var text:FlxText = new FlxText(20, 30, 0, "Event:");
+		tab_group_event.add(text);
+		var eventDropDown = new FlxUIDropDownMenu(20, 50, FlxUIDropDownMenu.makeStrIdLabelArray(leEvents, true), function(pressed:String) {
+			selectedPsychic = Std.parseInt(pressed);
+			descText.text = psychicEvents[selectedPsychic][1];
+			if(curSelectedNote != null) {
+				curSelectedNote[2] = psychicEvents[selectedPsychic][0];
+			}
+		});
+
+		var text:FlxText = new FlxText(20, 90, 0, "Value 1:");
+		tab_group_event.add(text);
+		value1InputText = new FlxUIInputText(20, 110, 100, "");
+
+		var text:FlxText = new FlxText(20, 130, 0, "Value 2:");
+		tab_group_event.add(text);
+		value2InputText = new FlxUIInputText(20, 150, 100, "");
+
+		tab_group_event.add(descText);
+		tab_group_event.add(value1InputText);
+		tab_group_event.add(value2InputText);
+		tab_group_event.add(eventDropDown);
+
+		UI_box.addGroup(tab_group_event);
 	}
 
 	#if desktop
@@ -1465,13 +1565,11 @@ class ChartingState extends MusicBeatState
 		{
 			note.sustainLength = daSus;
 			note.setGraphicSize(GRID_SIZE, GRID_SIZE);
-		}
-		else
-		{ // will i actually add an events system, good question i have no idea.
+		} else { // event note
 			note.loadGraphic(Paths.image('eventArrow'));
-			/*note.eventAbility = daSus;
-				note.eventVal1 = i[3];
-				note.eventVal2 = i[4]; */
+			note.psychicAbility = daSus;
+			note.psychicVal1 = i[3];
+			note.psychicVal2 = i[4];
 			note.setGraphicSize(GRID_SIZE, GRID_SIZE);
 		}
 		note.updateHitbox();
@@ -1586,14 +1684,13 @@ class ChartingState extends MusicBeatState
 		var noteData = Math.floor((FlxG.mouse.x - GRID_SIZE) / GRID_SIZE);
 		var noteSus = 0;
 
-		/*_song.notes[curSection].sectionNotes.push([noteStrum, noteData, 0, false]);
-
-			curSelectedNote = _song.notes[curSection].sectionNotes[_song.notes[curSection].sectionNotes.length - 1];
-
-			if (FlxG.keys.pressed.CONTROL)
-			{
-				_song.notes[curSection].sectionNotes.push([noteStrum, (noteData + 4) % 8, 0, false]);
-		}*/
+		if(noteData > -1) _song.notes[curSection].sectionNotes.push([noteStrum, noteData, noteSus, daType]);
+		else {
+			var psych = psychicEvents[selectedPsychic][0];
+			var text1 = value1InputText.text;
+			var text2 = value2InputText.text;
+			_song.notes[curSection].sectionNotes.push([noteStrum, noteData, psych, text1, text2]);
+		}
 
 		if (n != null)
 			_song.notes[curSection].sectionNotes.push([n.strumTime, n.noteData, n.sustainLength, false]);

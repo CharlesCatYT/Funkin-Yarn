@@ -116,6 +116,11 @@ class MainMenuState extends MusicBeatState
 		versionShit.setFormat(Paths.font('vcr.ttf'), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
 
+		#if mobileC
+addVirtualPadCamera(); //if hud disappears add false inside to ().
+addVirtualPad(LEFT_FULL, A_B);
+#end
+
 		super.create();
 	}
 

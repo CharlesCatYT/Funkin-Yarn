@@ -20,7 +20,7 @@
 	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" vsync="false" />
 
 	<!--Mobile-specific-->
-	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" resizable="false" />
+	<window if="mobile" orientation="landscape" fullscreen="true" resizable="false" allow-shaders="true" require-shaders="true" allow-high-dpi="true" />
 
 	<!-- ________________________________ Defines _______________________________ -->
 
@@ -87,6 +87,9 @@
 
 	<assets path="assets/fonts" embed="false" />
 
+	<assets path="mobile" rename="assets/mobile" if="mobileC" />
+	<haxelib name="extension-androidtools" if="android" />
+
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxedev set="webgl" if="html5" />
@@ -121,6 +124,26 @@
 	<haxedef name="HXCPP_CHECK_POINTER" if="CRASH_HANDLER" />
 	<haxedef name="HXCPP_STACK_LINE" if="CRASH_HANDLER" />
 	<haxedef name="HXCPP_STACK_TRACE" if="CRASH_HANDLER" />
+
+		<!--Mobile Controls Define-->
+	<define name="mobileC" if="mobile" /> <!--Can be added windows, mac or linux-->
+
+	<section if="android">
+		<config>
+			<!--Gradle-->
+			<!--<android gradle-version="7.4.2" gradle-plugin="7.3.1" />--> <!-- ENABLE THIS IF YOU HAVE ISSUES AT COMPILE -->
+
+			<!--Target SDK-->
+			<android min-sdk-version="16" target-sdk-version="29" max-sdk-version="33" if="${lime &lt; 8.1.0}"/>
+        </config>
+	</section>
+
+	<section if="ios">
+		<!--Dependency--> 
+		<dependency name="Metal.framework" if="${lime &lt; 8.0.0}" />
+	</section>
+
+    <haxedef name="no-deprecation-warnings" unless="debug" />
 
 	<!--Enable HScript fine error reporting at parsing time-->
 	<haxedef name="hscriptPos" if="hscript" />
