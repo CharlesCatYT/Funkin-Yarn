@@ -166,11 +166,6 @@ class FreeplayState extends MusicBeatState
 		changeSelection();
 		changeDiff();
 
-		#if mobileC
-addVirtualPadCamera(); //if hud disappears add false inside to ().
-addVirtualPad(LEFT_FULL, A_B);
-#end
-
 		super.create();
 
 		#if target.threaded
