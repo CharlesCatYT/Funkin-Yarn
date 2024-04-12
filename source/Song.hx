@@ -2,6 +2,7 @@ package;
 
 import haxe.Json;
 import openfl.utils.Assets;
+import SwagSection; 
 
 using StringTools;
 
@@ -25,6 +26,8 @@ class Song
 	{
 		if (folder.length > 0)
 			folder = folder.toLowerCase() + '/';
+
+		var rawJson;
 
 		if(jsonInput == 'events') { //Makes the game not crash while trying to load an events chart, doesn't work on HTML tho
 			#if sys

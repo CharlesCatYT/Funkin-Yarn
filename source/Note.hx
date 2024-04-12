@@ -23,6 +23,10 @@ class Note extends FlxSprite
 	public var parentNote(default, null):Note;
 	public var children(default, null):Array<Note> = [];
 
+	public var yarnAbility:String = '';
+	public var yarnVal1:String = '';
+	public var yarnVal2:String = '';
+
 	public var hitHealth:Float = defaultHitHealth;
 	public var missHealth:Float = defaultMissHealth;
 

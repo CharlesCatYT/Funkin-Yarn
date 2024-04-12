@@ -21,7 +21,6 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
-import flixel.util.typeLimit.NextState;
 
 using StringTools;
 
@@ -123,7 +122,7 @@ class MainMenuState extends MusicBeatState
 	function onMenuItemChange(item:MenuItem)
 		menuCamera.camFollow.copyFrom(item.getGraphicMidpoint());
 
-	function startExitState(nextState:NextState)
+	function startExitState(nextState:FlxState)
 	{
 		unloadAssets();
 
@@ -137,7 +136,7 @@ class MainMenuState extends MusicBeatState
 		});
 		new FlxTimer().start(0.4, function(tmr:FlxTimer)
 		{
-			FlxG.switchState(() -> nextState);
+			Main.switchState(nextState);
 		});
 	}
 
@@ -150,7 +149,7 @@ class MainMenuState extends MusicBeatState
 			menuItems.enabled = false;
 
 		if (controls.BACK && menuItems.enabled && !menuItems.busy)
-			FlxG.switchState(() -> new TitleState());
+			Main.switchState(new TitleState());
 
 		super.update(elapsed);
 	}

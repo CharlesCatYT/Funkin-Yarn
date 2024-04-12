@@ -41,7 +41,7 @@ class Main extends Sprite
 {
 	static final gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	static final gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
-	static final initialState:Class<FlxState> = () -> new TitleState(); // The FlxState the game starts with.
+	static final initialState:Class<FlxState> = TitleState; // The FlxState the game starts with.
 	static final framerate:Int = 120; // How many frames per second the game should run at.
 	static final skipSplash:Bool = false; // Whether to skip the flixel splash screen that appears in release mode.
 	static final startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
@@ -107,6 +107,38 @@ class Main extends Sprite
 		#end
 	}
 
+	public static function switchState(nextState:FlxState)
+		{
+			var callback = function()
+			{
+				if (nextState == FlxG.state)
+					Main.resetState();
+				else
+					FlxG.switchState(nextState);
+			};
+			if (!FlxTransitionableState.skipNextTransIn)
+			{
+				var state = FlxG.state;
+				@:privateAccess
+				if (Std.isOfType(state, FlxTransitionableState))
+					cast(state, FlxTransitionableState)._exiting = true;
+				while (state.subState != null)
+					state = state.subState;
+				state.openSubState(new FadeSubstate(0.5, false, callback));
+			}
+			else
+			{
+				FlxTransitionableState.skipNextTransIn = false;
+				callback();
+			}
+		}
+	
+	inline public static function resetState()
+	{
+		switchState(FlxG.state);
+	}
+
+		
 	#if CRASH_HANDLER
 	static final crashHandlerDirectory:String = './crashes';
 

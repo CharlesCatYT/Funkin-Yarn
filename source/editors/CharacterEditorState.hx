@@ -256,7 +256,7 @@ class CharacterEditorState extends MusicBeatState
 		if (FlxG.keys.justPressed.ESCAPE)
 		{
 			FlxG.mouse.visible = false;
-			FlxG.switchState(() -> new PlayState());
+			Main.switchState(new PlayState());
 		}
 
 		super.update(elapsed);

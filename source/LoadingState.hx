@@ -8,14 +8,13 @@ import lime.utils.AssetManifest;
 import lime.utils.Assets as LimeAssets;
 import flixel.FlxG;
 import flixel.FlxState;
-import flixel.util.typeLimit.NextState;
 import flixel.FlxSprite;
 import flixel.util.FlxTimer;
 import flixel.math.FlxMath;
 
 class LoadingState extends MusicBeatState
 {
-	var target:NextState;
+	var target:FlxState;
 	var targetShit:Float = 0;
 	var stopMusic = false;
 	var callbacks:MultiCallback;
@@ -28,7 +27,7 @@ class LoadingState extends MusicBeatState
 
 	public static var MIN_TIME = 1;
 
-	function new(target:NextState, stopMusic:Bool)
+	function new(target:FlxState, stopMusic:Bool)
 	{
 		super();
 		this.target = target;
@@ -122,7 +121,7 @@ class LoadingState extends MusicBeatState
 		if (stopMusic && FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
-		FlxG.switchState(() -> target);
+		Main.switchState(target);
 	}
 
 	inline static function getSongPath()
@@ -135,12 +134,12 @@ class LoadingState extends MusicBeatState
 		return Paths.voicesPath(PlayState.SONG.song);
 	}
 
-	inline static public function loadAndSwitchState(target:NextState, stopMusic = false)
+	inline static public function loadAndSwitchState(target:FlxState, stopMusic = false)
 	{
-		FlxG.switchState(() -> getNextState(target, stopMusic));
+		Main.switchState(getNextState(target, stopMusic));
 	}
 
-	static function getNextState(target:NextState, stopMusic = false):NextState
+	static function getNextState(target:FlxState, stopMusic = false):FlxState
 	{
 		switch(PlayState.storyWeek) {
 			default:

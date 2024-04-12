@@ -50,7 +50,7 @@ class StartState extends FlxState
 		super.create();
 
 		FlxTransitionableState.skipNextTransOut = true;
-		FlxG.switchState(() -> new TitleState());
+		Main.switchState(new TitleState());
 
 		FlxG.mouse.visible = false;
 	}

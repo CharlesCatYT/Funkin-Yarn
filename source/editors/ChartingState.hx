@@ -21,6 +21,9 @@ import lime.media.AudioBuffer;
 import haxe.io.Bytes;
 import flash.geom.Rectangle;
 import flash.media.Sound;
+import openfl.net.FileReference;
+import openfl.events.Event;
+import openfl.events.IOErrorEvent;
 import Conductor.BPMChangeEvent;
 import Song.SwagSong;
 
@@ -31,17 +34,14 @@ class ChartingState extends MusicBeatState
 	public static var instance(default, null):ChartingState;
 
 	var yarnEvents:Array<Dynamic> = [
-		['', "Nothing. Yep, that's right."],
+		['', "Nothing,"],
 		['Hey!', "Plays the \"Hey!\" animation from Bopeebo,\nValue 1: 0 = Only BF, 1 = Only GF,\nSomething else = Both.\nValue 2: Custom animation duration,\nleave it blank for 0.6s"],
 		['Set GF Speed', "Sets GF head bopping speed,\nValue 1: 1 = Normal speed, 2 = Half speed.\nOther values weren't tested though\nUsed on Fresh during the beatbox parts.\nWarning: Value must not have decimals!"],
 		['Add Camera Zoom', "Used on MILF on that one \"hard\" part\nValue 1: Camera zoom add (Default: 0.015)\nValue 2: UI zoom add (Default: 0.03)\nLeave the values blank if you want to use Default."],
-		['Flash Camera', "Flashes the camera,\nValue 1: Speed"],
-		['HUD Opacity', "Changes the HUD's opacity,\nValue 1: Opacity\nValue 2: Speed"],
-		['Show Image', "I don't know, show an image?\nValue 1: Image path\nValue 2: Speed"],
 		['Play Animation', "Plays an animation on a Character,\nonce the animation is completed,\nthe animation changes to Idle\n\nValue 1: Animation to play.\nValue 2: Character (0 = Dad, 1 = BF, 2 = GF)"],
-		['Camera Follow Pos', "Value 1: X\nValue 2: Y\n\nThe camera won't change the follow point\nafter using this, for getting it back\nto normal, leave both values blank."],
 	];
 
+	var _file:FileReference;
 
 	var UI_box:FlxUITabMenu;
 
@@ -79,6 +79,10 @@ class ChartingState extends MusicBeatState
 
 	var nextRenderedSustains:FlxTypedGroup<FlxSprite>;
 	var nextRenderedNotes:FlxTypedGroup<Note>;
+
+	var selectedYarn:Int = 0;
+	var value1InputText:FlxUIInputText;
+	var value2InputText:FlxUIInputText;
 
 	var gridBG:FlxSprite;
 
@@ -257,7 +261,7 @@ class ChartingState extends MusicBeatState
 			// trace('CHECKED!');
 		};
 
-		var saveButton:FlxButton = new FlxButton(110, 8, "Save", save);
+		var saveButton:FlxButton = new FlxButton(110, 8, "Save", saveLevel);
 
 		var reloadSong:FlxButton = new FlxButton(saveButton.x + saveButton.width + 10, saveButton.y, "Reload Audio", function()
 		{
@@ -283,8 +287,13 @@ class ChartingState extends MusicBeatState
 			#end
 			{
 				PlayState.SONG = Song.loadFromJson('events', songName);
-				FlxG.resetState();
+				Main.resetState();
 			}
+		});
+
+		var saveEvents:FlxButton = new FlxButton(110, loadEventJson.y, 'Save Events', function()
+		{
+			saveEvents();
 		});
 
 		var clear_notes:FlxButton = new FlxButton(320, 310, 'Clear all notes', function()
@@ -969,7 +978,7 @@ class ChartingState extends MusicBeatState
 				FlxG.sound.music.stop();
 				if (vocals != null)
 					vocals.stop();
-				LoadingState.loadAndSwitchState(() -> new PlayState());
+				LoadingState.loadAndSwitchState(new PlayState());
 			}
 
 			if (curSelectedNote != null && curSelectedNote[1] > -1)
@@ -1674,18 +1683,18 @@ class ChartingState extends MusicBeatState
 		var noteData = Math.floor((FlxG.mouse.x - GRID_SIZE) / GRID_SIZE);
 		var noteSus = 0;
 
-		if(noteData > -1) _song.notes[curSection].sectionNotes.push([noteStrum, noteData, noteSus, daType]);
-		else {
-			var psych = yarnEvents[selectedYarn][0];
+		if (noteData > -1)
+			if (n != null)
+				_song.notes[curSection].sectionNotes.push([n.strumTime, n.noteData, n.sustainLength, false]);
+			else
+				_song.notes[curSection].sectionNotes.push([noteStrum, noteData, noteSus, false]);
+		else
+		{
+			var yarner = yarnEvents[selectedYarn][0];
 			var text1 = value1InputText.text;
 			var text2 = value2InputText.text;
-			_song.notes[curSection].sectionNotes.push([noteStrum, noteData, psych, text1, text2]);
+			_song.notes[curSection].sectionNotes.push([noteStrum, noteData, yarner, text1, text2]);
 		}
-
-		if (n != null)
-			_song.notes[curSection].sectionNotes.push([n.strumTime, n.noteData, n.sustainLength, false]);
-		else
-			_song.notes[curSection].sectionNotes.push([noteStrum, noteData, noteSus, false]);
 
 		var thingy = _song.notes[curSection].sectionNotes[_song.notes[curSection].sectionNotes.length - 1];
 
@@ -1743,13 +1752,13 @@ class ChartingState extends MusicBeatState
 	function loadJson(song:String):Void
 	{
 		PlayState.SONG = Song.loadFromJson(song.toLowerCase(), song.toLowerCase());
-		FlxG.resetState();
+		Main.resetState();
 	}
 
 	function loadAutosave():Void
 	{
 		PlayState.SONG = Song.parseJSONshit(FlxG.save.data.autosave);
-		FlxG.resetState();
+		Main.resetState();
 	}
 
 	function autosaveSong():Void
@@ -1766,6 +1775,110 @@ class ChartingState extends MusicBeatState
 			"song": _song
 		}, '\t'), _song.song.toLowerCase() + ".json");
 	}
+
+	private function saveLevel()
+	{
+		var json = {
+			"song": _song
+		};
+
+		var data:String = Json.stringify(json, '\t');
+
+		if ((data != null) && (data.length > 0))
+		{
+			_file = new FileReference();
+			_file.addEventListener(Event.COMPLETE, onSaveComplete);
+			_file.addEventListener(Event.CANCEL, onSaveCancel);
+			_file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+			_file.save(data.trim(), _song.song.toLowerCase() + ".json");
+		}
+	}
+
+	function onSaveComplete(_):Void
+	{
+		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
+		_file.removeEventListener(Event.CANCEL, onSaveCancel);
+		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+		_file = null;
+		FlxG.log.notice("Successfully saved LEVEL DATA.");
+	}
+
+	/**
+	 * Called when the save file dialog is cancelled.
+	 */
+	function onSaveCancel(_):Void
+	{
+		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
+		_file.removeEventListener(Event.CANCEL, onSaveCancel);
+		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+		_file = null;
+	}
+
+	/**
+	 * Called if there is an error while saving the gameplay recording.
+	 */
+	function onSaveError(_):Void
+	{
+		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
+		_file.removeEventListener(Event.CANCEL, onSaveCancel);
+		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+		_file = null;
+		FlxG.log.error("Problem saving Level data");
+	}
+
+	private function saveEvents()
+		{
+			var events:Array<SwagSection> = [];
+			for (sec in 0..._song.notes.length) {
+				if(_song.notes[sec] == null) continue;
+	
+				var arrayNotes:Array<Dynamic> = [];
+				for (i in 0..._song.notes[sec].sectionNotes.length) {
+					var note:Array<Dynamic> = _song.notes[sec].sectionNotes[i];
+					if(note != null && note[1] < 0) {
+						arrayNotes.push(note);
+					}
+				}
+	
+				var sex:SwagSection = {
+					sectionNotes: arrayNotes,
+					lengthInSteps: 16,
+					typeOfSection: 0,
+					mustHitSection: false,
+					bpm: 0,
+					changeBPM: false,
+					altAnim: false
+				};
+				events.push(sex);
+			}
+	
+			var eventsSong:SwagSong = {
+				song: _song.song,
+				notes: events,
+				bpm: _song.bpm,
+				needsVoices: _song.needsVoices,
+				speed: _song.speed,
+	
+				player1: _song.player1,
+				player2: _song.player2,
+				gfVersion: _song.gfVersion,
+			};
+
+			var json = {
+				"song": eventsSong
+			}
+	
+			var data:String = Json.stringify(json, '\t');
+	
+			if ((data != null) && (data.length > 0))
+			{
+				_file = new FileReference();
+				_file.addEventListener(Event.COMPLETE, onSaveComplete);
+				_file.addEventListener(Event.CANCEL, onSaveCancel);
+				_file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+				_file.save(data.trim(), "events.json");
+			}
+		}
 
 	override public function destroy()
 	{

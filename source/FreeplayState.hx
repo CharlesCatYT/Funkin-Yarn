@@ -224,7 +224,7 @@ class FreeplayState extends MusicBeatState
 				colorTween.cancel();
 			}
 			FlxG.sound.play(Paths.sound("cancelMenu"));
-			FlxG.switchState(() -> new MainMenuState());
+			Main.switchState(new MainMenuState());
 			#if target.threaded
 			if (curPlaying > -1)
 				CoolUtil.resetMusic();
@@ -238,7 +238,7 @@ class FreeplayState extends MusicBeatState
 			PlayState.isStoryMode = false;
 			PlayState.storyDifficulty = curDifficulty;
 			PlayState.storyWeek = songs[curSelected].week;
-			LoadingState.loadAndSwitchState(() -> new PlayState(), true);
+			LoadingState.loadAndSwitchState(new PlayState(), true);
 
 			var songLowercase:String = songs[curSelected].songName.toLowerCase();
 			var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
@@ -259,10 +259,10 @@ class FreeplayState extends MusicBeatState
 			PlayState.isStoryMode = false;
 			PlayState.storyDifficulty = curDifficulty;
 			PlayState.storyWeek = songs[curSelected].week;
-			LoadingState.loadAndSwitchState(() -> new PlayState(), true);
+			LoadingState.loadAndSwitchState(new PlayState(), true);
 
 			unloadAssets();
-			FlxG.switchState(() -> new PlayState());
+			Main.switchState(new PlayState());
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.stop();
 		}

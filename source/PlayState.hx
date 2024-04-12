@@ -1369,7 +1369,7 @@ class PlayState extends MusicBeatState
 		#else
 		if (OpenFlAssets.exists(file)) {
 		#end
-			var eventsData:Array<SwagSection> = Song.loadFromJson('events', songName).notes;
+			var eventsData = Song.loadFromJson('events', songName).notes;
 			for (section in eventsData)
 			{
 				for (songNotes in section.sectionNotes)
@@ -1699,7 +1699,7 @@ class PlayState extends MusicBeatState
 				persistentUpdate = false;
 				persistentDraw = true;
 
-				FlxG.switchState(() -> new GitarooPause());
+				Main.switchState(new GitarooPause());
 			}
 			else
 			{
@@ -1729,7 +1729,7 @@ class PlayState extends MusicBeatState
 			persistentUpdate = false;
 			persistentDraw = true;
 
-			FlxG.switchState(() -> new editors.ChartingState());
+			Main.switchState(new editors.ChartingState());
 
 			#if discord_rpc
 			DiscordClient.changePresence("Chart Editor", null, null, true);
@@ -1741,7 +1741,7 @@ class PlayState extends MusicBeatState
 			persistentUpdate = false;
 			persistentDraw = true;
 
-			FlxG.switchState(() -> new editors.CharacterEditorState());
+			Main.switchState(new editors.CharacterEditorState());
 
 			#if discord_rpc
 			DiscordClient.changePresence("Character Editor", null, null, true);
@@ -1817,7 +1817,7 @@ class PlayState extends MusicBeatState
 					gf.danceSpeed = 1;
 					// case 163:
 					// FlxG.sound.music.stop();
-					// FlxG.switchState(() -> new TitleState());
+					// Main.switchState(new TitleState());
 			}
 		}
 
@@ -1828,7 +1828,7 @@ class PlayState extends MusicBeatState
 				case 128, 129, 130:
 					vocals.volume = 0;
 					// FlxG.sound.music.stop();
-					// FlxG.switchState(() -> new PlayState());
+					// Main.switchState(new PlayState());
 			}
 		}
 		// better streaming of shit
@@ -1864,7 +1864,7 @@ class PlayState extends MusicBeatState
 
 				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
-				// FlxG.switchState(() -> new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+				// Main.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
 				#if discord_rpc
 				// Game Over doesn't get his own variable because it's only used here
@@ -1896,7 +1896,7 @@ class PlayState extends MusicBeatState
 
 		while(eventNotes.length > 0) {
 			var leStrumTime:Float = eventNotes[0][0];
-			if(Conductor.songPosition < leStrumTime - early) {
+			if(Conductor.songPosition < leStrumTime) {
 				break;
 			}
 
@@ -1932,32 +1932,25 @@ class PlayState extends MusicBeatState
 				if(value != 0) {
 					if(dad.curCharacter == 'gf') {
 						dad.playAnim('cheer', true);
-						dad.specialAnim = true;
-						dad.heyTimer = time;
 					} else {
 						gf.playAnim('cheer', true);
-						gf.specialAnim = true;
-						gf.heyTimer = time;
 					}
 
 					if(curStage == 'mall') {
 						bottomBoppers.animation.play('hey', true);
-						heyTimer = time;
 					}
 				}
 				if(value != 1) {
 					boyfriend.playAnim('hey', true);
-					boyfriend.specialAnim = true;
-					boyfriend.heyTimer = time;
 				}
 
 			case 'Set GF Speed':
 				var value:Int = Std.parseInt(value1);
 				if(Math.isNaN(value)) value = 1;
-				gfSpeed = value;
+				gf.danceSpeed = value;
 
 			case 'Add Camera Zoom':
-				if(ClientPrefs.camZooms && FlxG.camera.zoom < 1.35) {
+				if(PreferencesMenu.getPref('camera-zoom') && FlxG.camera.zoom < 1.35) {
 					var camZoom:Float = Std.parseFloat(value1);
 					var hudZoom:Float = Std.parseFloat(value2);
 					if(Math.isNaN(camZoom)) camZoom = 0.015;
@@ -1978,30 +1971,7 @@ class PlayState extends MusicBeatState
 					case 2: char = gf;
 				}
 				char.playAnim(value1, true);
-				char.specialAnim = true;
-
-			case 'Camera Follow Pos':
-				var val1:Float = Std.parseFloat(value1);
-				var val2:Float = Std.parseFloat(value2);
-				if(Math.isNaN(val1)) val1 = 0;
-				if(Math.isNaN(val2)) val2 = 0;
-
-				isCameraOnForcedPos = false;
-				if(!Math.isNaN(Std.parseFloat(value1)) || !Math.isNaN(Std.parseFloat(value2))) {
-					camGame.camFollow.x = val1;
-					camGame.camFollow.y = val2;
-					isCameraOnForcedPos = true;
-				}
-				var val:Int = Std.parseInt(value1);
-				if(Math.isNaN(val)) val = 0;
-
-				if(val > 0) {
-					idleAltSuffix = '-alt';
-					if(value2 != null && value2.length > 0)
-						idleAltSuffix = value2;
-				} else {
-					idleAltSuffix = '';
-				}
+				// char.blockDance = true;
 		}
 	}
 
@@ -2099,7 +2069,7 @@ class PlayState extends MusicBeatState
 			{
 				unloadAssets();
 
-				FlxG.switchState(() -> new StoryMenuState());
+				Main.switchState(new StoryMenuState());
 
 				CoolUtil.resetMusic();
 
@@ -2136,7 +2106,7 @@ class PlayState extends MusicBeatState
 					FlxG.sound.play(Paths.sound('Lights_Shut_off'), 1, false, null, true, function()
 					{
 						SONG = Song.loadFromJson(storyPlaylist[0].toLowerCase() + difficulty, storyPlaylist[0]);
-						LoadingState.loadAndSwitchState(() -> new PlayState());
+						LoadingState.loadAndSwitchState(new PlayState());
 					});
 				}
 				else
@@ -2147,7 +2117,7 @@ class PlayState extends MusicBeatState
 					unloadAssets();
 
 					SONG = Song.loadFromJson(storyPlaylist[0].toLowerCase() + difficulty, storyPlaylist[0]);
-					LoadingState.loadAndSwitchState(() -> new PlayState());
+					LoadingState.loadAndSwitchState(new PlayState());
 				}
 			}
 		}
@@ -2155,7 +2125,7 @@ class PlayState extends MusicBeatState
 		{
 			unloadAssets();
 
-			FlxG.switchState(() -> new FreeplayState());
+			Main.switchState(new FreeplayState());
 			#if NO_PRELOAD_ALL
 			CoolUtil.resetMusic();
 			#end
