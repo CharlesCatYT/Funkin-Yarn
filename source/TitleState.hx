@@ -146,11 +146,9 @@ class TitleState extends MusicBeatState
 		if (FlxG.keys.justPressed.F)
 			FlxG.fullscreen = !FlxG.fullscreen;
 
-		var accept = controls.ACCEPT;
-
 		if (!transitioning && skippedIntro)
 		{
-			if (accept || FlxG.mouse.justPressed)
+			if (controls.ACCEPT || FlxG.mouse.justPressed)
 			{
 				if (titleText != null)
 					titleText.animation.play('press');
@@ -170,7 +168,7 @@ class TitleState extends MusicBeatState
 			}
 		}
 
-		if (accept && !skippedIntro && initialized)
+		if (!skippedIntro && initialized)
 			skipIntro();
 
 		if (swagShader != null)

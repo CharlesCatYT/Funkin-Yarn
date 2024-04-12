@@ -252,7 +252,6 @@ class Script extends HScriptTool
 		setVariable('FlxGroup', flixel.group.FlxGroup);
 		setVariable('ColorSwap', shaders.ColorSwap);
 		setVariable('YarnPrefs', ui.PreferencesMenu);
-		setVariable('Controls', Controls.instance);
 		setVariable('CoolUtil', CoolUtil);
 		setVariable('PlayerSettings', PlayerSettings);
 		setVariable('CoolCounter', CoolCounter);
