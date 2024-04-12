@@ -606,7 +606,7 @@ class Controls extends FlxActionSet
 			obj[button.getName()] = inputs;
 		}
 		return cannotReturn ? null : obj;
-	
+	}
 
 	override function destroy()
 	{

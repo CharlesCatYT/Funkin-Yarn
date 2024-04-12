@@ -1,3 +1,4 @@
+#if !macro
 import Paths;
 import flixel.*;
 import flixel.FlxBasic;
@@ -14,3 +15,4 @@ import sys.io.File;
 #end
 
 using StringTools;
+#end
