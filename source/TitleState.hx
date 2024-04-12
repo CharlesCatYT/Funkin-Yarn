@@ -148,38 +148,48 @@ class TitleState extends MusicBeatState
 
 		if (!transitioning && skippedIntro)
 		{
-			if (controls.ACCEPT || FlxG.mouse.justPressed)
+			try
 			{
-				if (titleText != null)
-					titleText.animation.play('press');
+				if (controls.ACCEPT || FlxG.mouse.justPressed)
+				{
+					if (titleText != null) titleText.animation.play('press');
+
+					FlxG.camera.flash(FlxColor.WHITE, 1);
+					FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
+
+					transitioning = true;
+					// FlxG.sound.music.stop();
+
+					new FlxTimer().start(2, function(twn:FlxTimer)
+					{
+						Main.switchState(new MainMenuState());
+					});
+
+					// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
+				}
+			}
+			catch (e)
+			{
+				trace('Controls will be rewritten soon...\n\n'
+					+ e
+					+ "\nMake me a pull request on https://github.com/CharlesCatYT/Funkin-Yarn/pulls. Please...");
+				if (titleText != null) titleText.animation.play('press');
 
 				FlxG.camera.flash(FlxColor.WHITE, 1);
 				FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
 
 				transitioning = true;
-				// FlxG.sound.music.stop();
 
 				new FlxTimer().start(2, function(twn:FlxTimer)
 				{
 					Main.switchState(new MainMenuState());
 				});
-
-				// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 			}
 		}
 
 		if (!skippedIntro && initialized)
 			skipIntro();
-
-		if (swagShader != null)
-		{
-			if (controls.UI_LEFT)
-				swagShader.update(-elapsed * 0.1);
-
-			if (controls.UI_RIGHT)
-				swagShader.update(elapsed * 0.1);
-		}
-
+		
 		super.update(elapsed);
 	}
 
